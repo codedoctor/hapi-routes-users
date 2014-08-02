@@ -5,7 +5,7 @@ fixtures = require './support/fixtures'
 loadServer = require './support/load-server'
 setupServer = require './support/setup-server'
 
-describe 'WHEN testing routes', ->
+describe 'testing create users', ->
   server = null
 
   beforeEach (cb) ->
@@ -13,63 +13,65 @@ describe 'WHEN testing routes', ->
       server = serverResult
       cb err
 
-  describe '/users without server setup', ->
-    it 'POST with invalid data should 400', (cb) ->
-      options =
-        method: "POST"
-        url: "/users"
-        payload: 
-          username: 'mw'
-          password: '12345678abc'
- 
-      server.inject options, (response) ->
-        result = response.result
+  describe 'without server setup', ->
+    describe 'POST /users', ->
+      describe 'with invalid data', ->
+        it 'should 400', (cb) ->
+          options =
+            method: "POST"
+            url: "/users"
+            payload: 
+              username: 'mw'
+              password: '12345678abc'
+     
+          server.inject options, (response) ->
+            result = response.result
 
-        response.statusCode.should.equal 400
-        should.exist result
-        cb null
+            response.statusCode.should.equal 400
+            should.exist result
+            cb null
 
-  describe '/users with server setup', ->
+  describe 'with server setup', ->
     beforeEach (cb) ->
       setupServer server,cb
 
-    it 'POST with invalid data should return a 400', (cb) ->
-      options =
-        method: "POST"
-        url: "/users"
-        payload: 
-          username: 'mw'
-          password: '12345678abc'
- 
-      server.inject options, (response) ->
-        result = response.result
+    describe 'POST /users', ->
+      describe 'with invalid data', ->
 
-        response.statusCode.should.equal 400
-        should.exist result
-  
-        cb null
+        it 'should return a 400', (cb) ->
+          options =
+            method: "POST"
+            url: "/users"
+            payload: 
+              username: 'mw'
+              password: '12345678abc'
+     
+          server.inject options, (response) ->
+            result = response.result
 
+            response.statusCode.should.equal 400
+            should.exist result
+      
+            cb null
 
-    it 'POST with valid data should create a user and return a token', (cb) ->
-      options =
-        method: "POST"
-        url: "/users"
-        payload: 
-          username: fixtures.user1.username
-          password: fixtures.user1.password
-          email: fixtures.user1.email
-          name: fixtures.user1.name
+      describe 'with valid data', ->
+        it 'should create a user and return a token', (cb) ->
+          options =
+            method: "POST"
+            url: "/users"
+            payload: 
+              username: fixtures.user1.username
+              password: fixtures.user1.password
+              email: fixtures.user1.email
+              name: fixtures.user1.name
 
-      server.inject options, (response) ->
-        result = response.result
+          server.inject options, (response) ->
+            result = response.result
 
-        response.statusCode.should.equal 201
-        should.exist result
-        result.should.have.property "token"
-        result.token.should.have.property "accessToken"
-        result.token.should.have.property "refreshToken"
-  
-        cb null
-
-
-
+            response.statusCode.should.equal 201
+            should.exist result
+            result.should.have.property "token"
+            result.token.should.have.property "accessToken"
+            result.token.should.have.property "refreshToken"
+      
+            cb null

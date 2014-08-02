@@ -133,8 +133,8 @@ module.exports = (plugin,options = {}) ->
         params: validationSchemas.paramsUsersPasswordPut
         payload: validationSchemas.payloadUsersPasswordPut
     handler: (request, reply) ->
-
       usernameOrIdOrMe = request.params.usernameOrIdOrMe
+
 
       if usernameOrIdOrMe.toLowerCase() is 'me'
         return reply Boom.unauthorized("Authentication required for this endpoint.") unless request.auth?.credentials?.id

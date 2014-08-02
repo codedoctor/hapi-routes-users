@@ -5,7 +5,7 @@ _ = require 'underscore'
 
 loadServer = require './support/load-server'
 
-describe 'WHEN index has been loaded', ->
+describe 'index has been loaded', ->
   it 'it should expose a HAPI interface', (cb) ->
 
     should.exist index

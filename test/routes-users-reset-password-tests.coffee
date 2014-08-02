@@ -6,7 +6,7 @@ loadServer = require './support/load-server'
 setupServer = require './support/setup-server'
 setupUsers = require './support/setup-users'
 
-describe 'WHEN testing reset password', ->
+describe 'testing reset password', ->
   server = null
 
   beforeEach (cb) ->
@@ -22,62 +22,66 @@ describe 'WHEN testing reset password', ->
       beforeEach (cb) ->
         setupUsers server,cb
 
-      it 'POST with invalid data should return a 400', (cb) ->
-        options =
-          method: "POST"
-          url: "/users/reset-password"
-          payload: {} 
-        server.inject options, (response) ->
-          result = response.result
+      describe 'POST /users/reset-password', ->
+        describe 'with invalid data', ->
+          it 'should return a 400', (cb) ->
+            options =
+              method: "POST"
+              url: "/users/reset-password"
+              payload: {} 
+            server.inject options, (response) ->
+              result = response.result
 
-          response.statusCode.should.equal 400
-          should.exist result
-    
-          cb null
+              response.statusCode.should.equal 400
+              should.exist result
+        
+              cb null
 
-      it 'POST with valid data should create a password reset token', (cb) ->
-        options =
-          method: "POST"
-          url: "/users/reset-password"
-          payload: 
-            login: fixtures.user1.email
+        describe 'with valid data', ->
+          it 'POST with valid data should create a password reset token', (cb) ->
+            options =
+              method: "POST"
+              url: "/users/reset-password"
+              payload: 
+                login: fixtures.user1.email
 
-        server.inject options, (response) ->
-          result = response.result
+            server.inject options, (response) ->
+              result = response.result
 
-          response.statusCode.should.equal 201
-          should.exist result
-          result.should.have.property "token"
-    
-          cb null
+              response.statusCode.should.equal 201
+              should.exist result
+              result.should.have.property "token"
+        
+              cb null
 
-      it 'POST applying a valid token and password should reset it', (cb) ->
-        options =
-          method: "POST"
-          url: "/users/reset-password"
-          payload: 
-            login: fixtures.user1.email
+      describe 'POST /users/reset-password-tokens', ->
+        describe 'applying a valid token and password', ->
+          it 'should reset it', (cb) ->
+            options =
+              method: "POST"
+              url: "/users/reset-password"
+              payload: 
+                login: fixtures.user1.email
 
-        server.inject options, (response) ->
-          result = response.result
+            server.inject options, (response) ->
+              result = response.result
 
-          response.statusCode.should.equal 201
-          should.exist result
-    
-          console.log result.token
-          options =
-            method: "POST"
-            url: "/users/reset-password/tokens"
-            payload: 
-              token: result.token
-              password: fixtures.validPassword 
+              response.statusCode.should.equal 201
+              should.exist result
+        
+              options =
+                method: "POST"
+                url: "/users/reset-password/tokens"
+                payload: 
+                  token: result.token
+                  password: fixtures.validPassword 
 
-          server.inject options, (response) ->
-            result = response.result
+              server.inject options, (response) ->
+                result = response.result
 
-            response.statusCode.should.equal 200
-            should.exist result
+                response.statusCode.should.equal 200
+                should.exist result
 
-            cb null
+                cb null
 
 

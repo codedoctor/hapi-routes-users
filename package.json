@@ -8,7 +8,7 @@
     "url": "https://github.com/codedoctor/hapi-routes-users.git"
   },
   "scripts": {
-    "test": "node_modules/.bin/grunt test"
+    "test": "node_modules/.bin/grunt testandcoverage"
   },
   "description": "Provides API endpoints for HAPI servers to manage users. DO NOT USE YET",
   "dependencies": {

@@ -1,15 +1,5 @@
 _ = require 'underscore'
 
-###
-    mochacov:
-      options:
-        coveralls:
-          repoToken: "F1ED34h04IisjUmf4fH71aBLnO0oB8Id5"
-        require: ['coffee-script/register','should']
-      all: ['test/**/*-tests.coffee']
-
-###
-
 coffeeRename = (destBase, destPath) ->
   destPath = destPath.replace 'src/',''
   destBase + destPath.replace /\.coffee$/, '.js'

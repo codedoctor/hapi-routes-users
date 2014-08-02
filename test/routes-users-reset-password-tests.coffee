@@ -35,7 +35,6 @@ describe 'WHEN testing reset password', ->
     
           cb null
 
-
       it 'POST with valid data should create a password reset token', (cb) ->
         options =
           method: "POST"
@@ -52,5 +51,33 @@ describe 'WHEN testing reset password', ->
     
           cb null
 
+      it 'POST applying a valid token and password should reset it', (cb) ->
+        options =
+          method: "POST"
+          url: "/users/reset-password"
+          payload: 
+            login: fixtures.user1.email
+
+        server.inject options, (response) ->
+          result = response.result
+
+          response.statusCode.should.equal 201
+          should.exist result
+    
+          console.log result.token
+          options =
+            method: "POST"
+            url: "/users/reset-password/tokens"
+            payload: 
+              token: result.token
+              password: fixtures.validPassword 
+
+          server.inject options, (response) ->
+            result = response.result
+
+            response.statusCode.should.equal 200
+            should.exist result
+
+            cb null
 
 

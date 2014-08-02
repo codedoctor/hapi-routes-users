@@ -28,6 +28,7 @@ module.exports = loadServer = (cb) ->
         realm: 'codedoctor'
         scope: null
         sendEmailPasswordReset: (email,payload,cb) -> cb null
+        sendEmailPasswordResetSuccess: (email,payload,cb) -> cb null
   ]
 
   mongoose.disconnect()

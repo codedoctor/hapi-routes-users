@@ -19,7 +19,6 @@ module.exports = (plugin,options = {}) ->
 
   options.scope ||= null
 
-
   hapiIdentityStore = -> plugin.plugins['hapi-identity-store']
   Hoek.assert hapiIdentityStore(),"Could not find 'hapi-identity-store' plugin."
 
@@ -128,13 +127,11 @@ module.exports = (plugin,options = {}) ->
     path: "/users/{usernameOrIdOrMe}/password"
     method: "PUT"
     config:
-      auth: false
       validate:
         params: validationSchemas.paramsUsersPasswordPut
         payload: validationSchemas.payloadUsersPasswordPut
     handler: (request, reply) ->
       usernameOrIdOrMe = request.params.usernameOrIdOrMe
-
 
       if usernameOrIdOrMe.toLowerCase() is 'me'
         return reply Boom.unauthorized("Authentication required for this endpoint.") unless request.auth?.credentials?.id
@@ -158,11 +155,10 @@ module.exports = (plugin,options = {}) ->
         reply().code(204)
 
   ###
-
     @app.get '/users', userInScope("server-access"), paginatorMiddleware(), @all
     @app.get '/users/:id', userInScope("server-access"), @get
     @app.patch '/users/:usernameOrId', userInScope("server-access"), @patch
-    @app.delete '/users/:usernameOrId', userInScope("server-access"), @delete
 
+    @app.delete '/users/:usernameOrId', userInScope("server-access"), @delete
   ####
 

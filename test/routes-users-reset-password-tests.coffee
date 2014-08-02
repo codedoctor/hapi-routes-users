@@ -68,7 +68,7 @@ describe 'testing reset password', ->
 
               response.statusCode.should.equal 201
               should.exist result
-        
+
               options =
                 method: "POST"
                 url: "/users/reset-password/tokens"

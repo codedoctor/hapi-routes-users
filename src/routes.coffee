@@ -68,9 +68,10 @@ module.exports = (plugin,options = {}) ->
         return reply Boom.create(400,"Unable to retrieve password.") unless user and token
 
         primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
+        sendAttempt = !!primaryEmail
 
 
-        if primaryEmail
+        if sendAttempt
           payload =
             dislayName: user.displayName || user.username
             user: user
@@ -87,9 +88,7 @@ module.exports = (plugin,options = {}) ->
                 msg: "Failed to send email."
               plugin.log ['error','customer-support-likely', data] 
 
-          reply( {token: token, emailSentAttempted: true}).code(201)
-        else
-          reply( {token: token, emailSentAttempted: false}).code(201)
+        reply( {token: token, emailSentAttempted: sendAttempt}).code(201)
 
 
   ###
@@ -110,8 +109,9 @@ module.exports = (plugin,options = {}) ->
         return reply err if err
 
         primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
+        sendAttempt = !!primaryEmail
 
-        if primaryEmail
+        if sendAttempt
           payload =
             dislayName: user.displayName || user.username
             user: user
@@ -126,18 +126,16 @@ module.exports = (plugin,options = {}) ->
                 msg: "Failed to send email."
               plugin.log ['error','customer-support-likely', data] 
 
-          reply( {emailSentAttempted: true}).code(200)
-        else
-          reply( {emailSentAttempted: false}).code(200)
-
+        reply( {emailSentAttempted: sendAttempt}).code(200)
+        
 
   ###
+    @app.put '/users/:usernameOrId/password', userInScope("server-access"), routeValidator(schemaPutPassword), @putPassword
+
     @app.get '/users', userInScope("server-access"), paginatorMiddleware(), @all
     @app.get '/users/:id', userInScope("server-access"), @get
-
     @app.patch '/users/:usernameOrId', userInScope("server-access"), @patch
     @app.delete '/users/:usernameOrId', userInScope("server-access"), @delete
 
-    @app.put '/users/:usernameOrId/password', userInScope("server-access"), routeValidator(schemaPutPassword), @putPassword
   ####
 

@@ -13,6 +13,9 @@ module.exports = (plugin,options = {}) ->
   Hoek.assert options.accountId,"options parameter requires an accountId"
   Hoek.assert options.baseUrl,"options parameter requires an baseUrl"
   Hoek.assert options.realm,"options parameter requires a realm"
+  Hoek.assert options.sendEmailPasswordReset,"options parameter requires a sendEmailPasswordReset function"
+  Hoek.assert _.isFunction(options.sendEmailPasswordReset),"options parameter requires sendEmailPasswordReset to be a function"
+
   options.scope ||= null
 
 
@@ -43,10 +46,78 @@ module.exports = (plugin,options = {}) ->
           return reply err if err
           reply(userWithToken).code(201)
 
+  ###
+  Posts a request for a password reset token.
+  requires a login as input parameter, which can be username or password
+  ###
+  plugin.route
+    path: "/users/reset-password"
+    method: "POST"
+    config:
+      auth: false
+      validate:
+        payload: validationSchemas.payloadUsersPasswordResetTokensPost
+    handler: (request, reply) ->
 
+      methodsUsers().resetPassword options.accountId,request.payload.login,null, (err,user,token) =>
+        return reply err if err
+        return reply Boom.create(400,"Unable to retrieve password.") unless user and token
+
+        primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
+
+
+        if primaryEmail
+          payload =
+            dislayName: user.displayName || user.username
+            user: user
+            trackingId: user._id
+            trackingClass: 'User'
+            token: token
+            resetUrl : "http://fanignite.com/users/reset-password/reset?token=#{token}"
+
+          # Send email is run outside this tick, and we only care about the result for loggin purposes.
+          options.sendEmailPasswordReset primaryEmail,payload, (err) ->
+            if err
+              data = 
+                login: login
+                msg: "Failed to send email."
+              plugin.log ['error','customer-support-likely', data] 
+
+          reply( {token: token, emailSentAttempted: true}).code(201)
+        else
+          reply( {token: token, emailSentAttempted: false}).code(201)
+
+
+      ###
+
+      #methodsUsers().create options.accountId,request.payload, {}, (err,user) ->
+      #  return reply err if err
+
+      #    helperAddTokenToUser methodsOauthAuth(), options.baseUrl,options.accountId,user._id,options.clientId,options.realm,options.scope,user, (err, userWithToken) ->
+      #    return reply err if err
+      #    reply(userWithToken).code(201)
+
+      email = req.body.email
+      @identityStore.users.resetPassword req.accountId, email, {},(err,user,token) =>
+        return cb err if err
+        res.json 200, {}
+
+        url = "http://localhost:5500/users/me/reset-password/#{token}"
+
+        # Note: Someone must take this from the queue and send the code to the user.
+        if user.primaryEmail && user.primaryEmail.length > 5
+          payload =
+            user: user
+            token : token
+            trackingId: user._id
+            url : url
+            trackingClass: 'User'
+
+          @emailEngine.sendOne user.displayName || user.username,user.primaryEmail,payload,2556, null
+
+      ###
 
   ###
-    @app.post '/users', userInScope("server-access"), routeValidator(schemaCreateUser), @post
     @app.get '/users', userInScope("server-access"), paginatorMiddleware(), @all
     @app.get '/users/:id', userInScope("server-access"), @get
 

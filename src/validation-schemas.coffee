@@ -22,3 +22,6 @@ module.exports =
       email: Joi.string().email().required().example('john@smith.com')
     ).with('username', 'password','email','name').options({ allowUnkown: true, stripUnknown: true })
 
+  payloadUsersPasswordResetTokensPost : Joi.object().keys(
+    login: Joi.string().min(minLoginLength).max(maxLoginLength).required().example('johnsmith').description('The login field can either be an email address or a username.')
+    ).options({ allowUnkown: true, stripUnknown: true })

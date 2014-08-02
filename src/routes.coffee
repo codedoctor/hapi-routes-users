@@ -86,7 +86,7 @@ module.exports = (plugin,options = {}) ->
               data = 
                 login: login
                 msg: "Failed to send email."
-              plugin.log ['error','customer-support-likely', data] 
+              plugin.log ['error','customer-support-likely'], data 
 
         reply( {token: token, emailSentAttempted: sendAttempt}).code(201)
 
@@ -124,7 +124,7 @@ module.exports = (plugin,options = {}) ->
               data = 
                 login: login
                 msg: "Failed to send email."
-              plugin.log ['error','customer-support-likely', data] 
+              plugin.log ['error','customer-support-likely'], data 
 
         reply( {emailSentAttempted: sendAttempt}).code(200)
         

@@ -27,8 +27,7 @@ module.exports = loadServer = (cb) ->
         baseUrl: "http://localhost:#{testPort}"
         realm: 'codedoctor'
         scope: null
-        sendEmailPasswordReset: (email,payload,cb) -> cb null
-        sendEmailPasswordResetSuccess: (email,payload,cb) -> cb null
+        sendEmail: (kind,email,payload,cb) -> cb null
   ]
 
   mongoose.disconnect()

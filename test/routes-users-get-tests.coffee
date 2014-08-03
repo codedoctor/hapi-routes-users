@@ -6,7 +6,7 @@ loadServer = require './support/load-server'
 setupServer = require './support/setup-server'
 setupUsers = require './support/setup-users'
 
-describe 'testing users all', ->
+describe 'testing user get', ->
   server = null
 
   beforeEach (cb) ->
@@ -22,12 +22,12 @@ describe 'testing users all', ->
       beforeEach (cb) ->
         setupUsers server,cb
 
-      describe 'against /users with no scope', ->
+      describe 'against /users/me with no scope', ->
         describe 'GET with auth', ->
           it 'should return 200', (cb) ->
             options =
               method: "GET"
-              url: "/users"
+              url: "/users/me"
               credentials: fixtures.user1
             server.inject options, (response) ->
               result = response.result

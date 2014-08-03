@@ -58,3 +58,7 @@ module.exports =
   paramsUsersPatch: Joi.object().keys(
       usernameOrIdOrMe: validateUsernameOrIdOrMe.required() 
     )
+
+  paramsUsersGet: Joi.object().keys(
+      usernameOrIdOrMe: validateUsernameOrIdOrMe.required() 
+    )

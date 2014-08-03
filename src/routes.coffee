@@ -210,10 +210,26 @@ module.exports = (plugin,options = {}) ->
 
         reply(user).code(2040)
 
+  plugin.route
+    path: "/users/{usernameOrIdOrMe}"
+    method: "GET"
+    config:
+      validate:
+        params: validationSchemas.paramsUsersGet
+    handler: (request, reply) ->
+      usernameOrIdOrMe = request.params.usernameOrIdOrMe
+
+      if usernameOrIdOrMe.toLowerCase() is 'me'
+        return reply Boom.unauthorized("Authentication required for this endpoint.") unless request.auth?.credentials?.id
+        usernameOrIdOrMe = request.auth.credentials.id
+
+      methodsUsers().getByNameOrId options.accountId, usernameOrIdOrMe,null,  (err,user) ->
+        return reply err if err
+
+        reply user
 
   ###
     @app.get '/users/:id', userInScope("server-access"), @get
-    @app.patch '/users/:usernameOrId', userInScope("server-access"), @patch
 
   ####
 

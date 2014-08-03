@@ -13,3 +13,5 @@ Dependencies:
 
 * Requires HAPI >= 6.0.0 and hapi-identity-store
 
+
+---> profile store

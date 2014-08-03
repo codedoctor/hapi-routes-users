@@ -44,7 +44,7 @@ describe 'testing change password', ->
               method: "PUT"
               url: "/users/me/password"
               payload: {} 
-              credentials: fixtures.credentials
+              credentials: fixtures.user1
             server.inject options, (response) ->
               result = response.result
 

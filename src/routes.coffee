@@ -8,6 +8,7 @@ protoGetAll = require './proto-get-all'
 helperAddTokenToUser = require './helper-add-token-to-user'
 validationSchemas = require './validation-schemas'
 i18n = require './i18n'
+helperObjToRest = require './helper-obj-to-rest'
 
 module.exports = (plugin,options = {}) ->
   Hoek.assert options.clientId,"options parameter requires a clientId"
@@ -208,7 +209,7 @@ module.exports = (plugin,options = {}) ->
 
           fnSendEmail i18n.emailKindPasswordChanged, primaryEmail,payload
 
-        reply(user).code(2040)
+        reply(helperObjToRest.user user, "#{options.baseUrl}/users").code(204)
 
   plugin.route
     path: "/users/{usernameOrIdOrMe}"
@@ -226,10 +227,6 @@ module.exports = (plugin,options = {}) ->
       methodsUsers().getByNameOrId options.accountId, usernameOrIdOrMe,null,  (err,user) ->
         return reply err if err
 
-        reply user
+        reply(helperObjToRest.user user, "#{options.baseUrl}/users")
 
-  ###
-    @app.get '/users/:id', userInScope("server-access"), @get
-
-  ####
 

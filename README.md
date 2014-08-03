@@ -4,24 +4,16 @@
 [![Dependency Status](https://gemnasium.com/codedoctor/hapi-routes-users.svg)](https://gemnasium.com/codedoctor/hapi-routes-users)
 [![NPM Downloads](http://img.shields.io/npm/dm/hapi-routes-users.svg)](https://www.npmjs.org/package/hapi-auth-bearer-mw)
 [![Issues](http://img.shields.io/github/issues/codedoctor/hapi-routes-users.svg)](https://github.com/codedoctor/hapi-routes-users/issues)
-
+[![HAPI 6.0](http://img.shields.io/badge/hapi-6.0-blue.svg)](http://hapijs.com)
 [![API Documentation](http://img.shields.io/badge/API-Documentation-ff69b4.svg)](http://coffeedoc.info/github/codedoctor/hapi-routes-users)
 
 (C) 2014 Martin Wawrusch
 
-
-DO NOT USE YET
-
 Provides API endpoints for HAPI servers to manage users.
 
-Dependencies:
+# Dependencies
 
 * Requires HAPI >= 6.0.0 and hapi-identity-store
 
-
--> all -> transform user
--> extract paging and test
--> all messages into i18n
--> security
--> profile store
+# See also
 

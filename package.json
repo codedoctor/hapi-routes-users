@@ -37,7 +37,7 @@
     "hapi": "6.2.1",
     "hapi-identity-store": "1.0.1",
     "matchdep": "0.3.0",
-    "mocha": "1.20.1",
+    "mocha": "1.21.3",
     "mongoose": "3.8.13",
     "should": "4.0.4"
   },

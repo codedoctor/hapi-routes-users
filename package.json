@@ -1,6 +1,6 @@
 {
   "name": "hapi-routes-users",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "main": "lib/index.js",
   "repository": {
@@ -22,12 +22,12 @@
   },
   "devDependencies": {
     "async": "0.9.0",
-    "blanket" : "1.1.6",
+    "blanket": "1.1.6",
     "codo": "2.0.9",
     "coffee-script": "1.7.1",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
-    "grunt-mocha-cov" : "0.2.1",
+    "grunt-mocha-cov": "0.2.1",
     "grunt-contrib-coffee": "0.10.1",
     "grunt-contrib-watch": "0.6.1",
     "grunt-env": "0.4.1",
@@ -42,11 +42,11 @@
     "should": "4.0.4"
   },
   "config": {
-  "blanket": {
-    "pattern": [
-      "lib"
-    ],
-    "data-cover-never": "node_modules"
+    "blanket": {
+      "pattern": [
+        "lib"
+      ],
+      "data-cover-never": "node_modules"
+    }
   }
-}
 }

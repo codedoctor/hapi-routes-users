@@ -26,8 +26,18 @@ module.exports = (grunt) ->
         command: "npm install"
 
     env:
+      dev:
+        NODE_ENV: "development"
       test:
         NODE_ENV: "test"
+
+    codo:
+      options:
+        undocumented: true
+        private: true
+        analytics: false
+      src: ['src/**/*.coffee']
+
 
     mochaTest:
       test:
@@ -63,6 +73,8 @@ module.exports = (grunt) ->
   ]
 
   grunt.registerTask "build", [
+    'env:dev'
+    'codo'
     'coffee'
     'test'
   ]
@@ -80,7 +92,7 @@ module.exports = (grunt) ->
 
 
   grunt.registerTask 'deploy', [
-    'test'
+    'build'
     'release'
   ]
 

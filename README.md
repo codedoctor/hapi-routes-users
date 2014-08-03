@@ -11,9 +11,9 @@
 
 Provides API endpoints for HAPI servers to manage users.
 
-# Dependencies
+## Dependencies
 
 * Requires HAPI >= 6.0.0 and hapi-identity-store
 
-# See also
+## See also
 

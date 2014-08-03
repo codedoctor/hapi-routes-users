@@ -5,6 +5,7 @@
 [![NPM Downloads](http://img.shields.io/npm/dm/hapi-routes-users.svg)](https://www.npmjs.org/package/hapi-auth-bearer-mw)
 [![Issues](http://img.shields.io/github/issues/codedoctor/hapi-routes-users.svg)](https://github.com/codedoctor/hapi-routes-users/issues)
 
+[API Documentation](http://coffeedoc.info/github/codedoctor/hapi-routes-users)
 
 (C) 2014 Martin Wawrusch
 
@@ -24,14 +25,3 @@ Dependencies:
 -> security
 -> profile store
 
-martin__: it's a simple plugin.ext('onPreResponse', function (request, reply) { .... });
-
-
-
-  --- hapi-routes-users-authorizations
-    @app.get '/users/:userId/authorizations',@getAuthorizations
-    @app.post '/users/:userId/authorizations',@postAuthorization
-    @app.delete '/users/:userId/authorizations/:authorizationId',@deleteAuthorization
-
-  
-  --- hapi-routes-oauth-management

@@ -5,7 +5,7 @@
 [![NPM Downloads](http://img.shields.io/npm/dm/hapi-routes-users.svg)](https://www.npmjs.org/package/hapi-auth-bearer-mw)
 [![Issues](http://img.shields.io/github/issues/codedoctor/hapi-routes-users.svg)](https://github.com/codedoctor/hapi-routes-users/issues)
 
-[API Documentation](http://coffeedoc.info/github/codedoctor/hapi-routes-users)
+[![API Documentation](http://img.shields.io/badge/API-Documentation-ff69b4.svg)](http://coffeedoc.info/github/codedoctor/hapi-routes-users)
 
 (C) 2014 Martin Wawrusch
 

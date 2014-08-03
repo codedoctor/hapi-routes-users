@@ -5,7 +5,7 @@ module.exports =
   identity: (identity,baseUrl) ->
     return null unless identity
     res =
-      url : "#{baseUrl}/#{identity._id}"
+      _url : "#{baseUrl}/#{identity._id}"
       id : identity._id
       provider : identity.provider
       key : identity.key
@@ -22,7 +22,7 @@ module.exports =
 
     localUrl = "#{baseUrl}/#{user._id}"
     res =
-      url: localUrl
+      _url: localUrl
       id: user._id
       username: user.username
       displayName: user.displayName
@@ -65,7 +65,7 @@ module.exports =
     localUrl = "#{baseUrl}/#{oauthApp._id}"
     
     res =
-      url : localUrl
+      _url : localUrl
       id : oauthApp._id
       name : oauthApp.name
       description : oauthApp.description
@@ -95,7 +95,7 @@ module.exports =
   organization: (organization,baseUrl) ->
     return null unless organization
     res = 
-      url : "#{baseUrl}/#{organization._id}"
+      _url : "#{baseUrl}/#{organization._id}"
       id : organization._id
       name : organization.name
       description : organization.description
@@ -115,7 +115,7 @@ module.exports =
   oauthClient:  (oauthClient,baseUrl) ->
     return null unless oauthClient
     res = 
-      url : "#{baseUrl}/#{oauthClient._id}"
+      _url : "#{baseUrl}/#{oauthClient._id}"
       id : oauthClient._id
       clientId : oauthClient.clientId
       secret : oauthClient.secret

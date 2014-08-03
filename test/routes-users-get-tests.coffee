@@ -33,7 +33,6 @@ describe 'testing user get', ->
               result = response.result
 
               response.statusCode.should.equal 200
-              console.log JSON.stringify(result)
               should.exist result
         
               cb null

@@ -47,3 +47,14 @@ module.exports =
       usernameOrIdOrMe: validateUsernameOrIdOrMe.required() 
     )
 
+  paramsUsersDelete: Joi.object().keys(
+      usernameOrIdOrMe: validateUsernameOrIdOrMe.required() 
+    )
+
+  payloadUsersPatch : Joi.object().keys(
+    password: validatePassword.description('The new password for the user.')
+    ).options({ allowUnkown: true, stripUnknown: true })
+
+  paramsUsersPatch: Joi.object().keys(
+      usernameOrIdOrMe: validateUsernameOrIdOrMe.required() 
+    )

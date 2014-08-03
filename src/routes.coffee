@@ -4,6 +4,7 @@ Hoek = require "hoek"
 Joi = require "joi"
 url = require 'url'
 
+protoGetAll = require './proto-get-all'
 helperAddTokenToUser = require './helper-add-token-to-user'
 validationSchemas = require './validation-schemas'
 i18n = require './i18n'
@@ -37,6 +38,8 @@ module.exports = (plugin,options = {}) ->
           msg: "Failed to send email."
         plugin.log ['error','customer-support-likely'], data 
 
+
+  protoGetAll plugin,"users",methodsUsers(),options.accountId, null,null
 
   ###
   Creates a new user and returns it and the new session.
@@ -154,11 +157,63 @@ module.exports = (plugin,options = {}) ->
 
         reply().code(204)
 
+  plugin.route
+    path: "/users/{usernameOrIdOrMe}"
+    method: "DELETE"
+    config:
+      validate:
+        params: validationSchemas.paramsUsersDelete
+    handler: (request, reply) ->
+      usernameOrIdOrMe = request.params.usernameOrIdOrMe
+
+      if usernameOrIdOrMe.toLowerCase() is 'me'
+        return reply Boom.unauthorized("Authentication required for this endpoint.") unless request.auth?.credentials?.id
+        usernameOrIdOrMe = request.auth.credentials.id
+
+      methodsUsers().delete options.accountId,usernameOrIdOrMe,null, (err,user) ->
+        ###
+        @TODO Warning: we should eat not found error here.
+        ###
+        return reply err if err
+
+        reply().code(204)
+
+
+  plugin.route
+    path: "/users/{usernameOrIdOrMe}"
+    method: "PATCH"
+    config:
+      validate:
+        params: validationSchemas.paramsUsersPatch
+        payload: validationSchemas.payloadUsersPatch
+    handler: (request, reply) ->
+      usernameOrIdOrMe = request.params.usernameOrIdOrMe
+
+      if usernameOrIdOrMe.toLowerCase() is 'me'
+        return reply Boom.unauthorized("Authentication required for this endpoint.") unless request.auth?.credentials?.id
+        usernameOrIdOrMe = request.auth.credentials.id
+
+      methodsUsers().patch options.accountId, usernameOrIdOrMe,request.payload,null,  (err,user) ->
+        return reply err if err
+
+        primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
+        sendAttempt = !!primaryEmail && request.payload.password
+
+        if sendAttempt
+          payload =
+            dislayName: user.displayName || user.username
+            user: user
+            trackingId: user._id
+            trackingClass: 'User'
+
+          fnSendEmail i18n.emailKindPasswordChanged, primaryEmail,payload
+
+        reply(user).code(2040)
+
+
   ###
-    @app.get '/users', userInScope("server-access"), paginatorMiddleware(), @all
     @app.get '/users/:id', userInScope("server-access"), @get
     @app.patch '/users/:usernameOrId', userInScope("server-access"), @patch
 
-    @app.delete '/users/:usernameOrId', userInScope("server-access"), @delete
   ####
 

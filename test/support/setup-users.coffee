@@ -1,4 +1,5 @@
 fixtures = require './fixtures'
+mongoose = require 'mongoose'
 
 module.exports = (server,cb) ->
   data =
@@ -8,6 +9,8 @@ module.exports = (server,cb) ->
     name: fixtures.user1.name
 
   methods = server.pack.plugins['hapi-identity-store'].methods
+
+  fixtures.user1.id = null
   methods.users.create fixtures.accountId,data,null, (err,user,token) ->
     return cb err if err
     fixtures.user1.id = user._id

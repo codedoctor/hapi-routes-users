@@ -39,6 +39,14 @@ module.exports = (plugin,options = {}) ->
           msg: "Failed to send email."
         plugin.log ['error','customer-support-likely'], data 
 
+  fbUsernameFromRequest = (request) ->
+    usernameOrIdOrMe = request.params.usernameOrIdOrMe
+
+    if usernameOrIdOrMe.toLowerCase() is 'me'
+      return null unless request.auth?.credentials?.id
+      usernameOrIdOrMe = request.auth.credentials.id
+    return usernameOrIdOrMe
+
 
   protoGetAll plugin,"users",methodsUsers(),options.accountId, null,null
 
@@ -135,11 +143,8 @@ module.exports = (plugin,options = {}) ->
         params: validationSchemas.paramsUsersPasswordPut
         payload: validationSchemas.payloadUsersPasswordPut
     handler: (request, reply) ->
-      usernameOrIdOrMe = request.params.usernameOrIdOrMe
-
-      if usernameOrIdOrMe.toLowerCase() is 'me'
-        return reply Boom.unauthorized("Authentication required for this endpoint.") unless request.auth?.credentials?.id
-        usernameOrIdOrMe = request.auth.credentials.id
+      usernameOrIdOrMe = fbUsernameFromRequest request
+      return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
 
       methodsUsers().patch options.accountId, usernameOrIdOrMe,password : request.payload.password,null,  (err,user) ->
         return reply err if err
@@ -165,11 +170,8 @@ module.exports = (plugin,options = {}) ->
       validate:
         params: validationSchemas.paramsUsersDelete
     handler: (request, reply) ->
-      usernameOrIdOrMe = request.params.usernameOrIdOrMe
-
-      if usernameOrIdOrMe.toLowerCase() is 'me'
-        return reply Boom.unauthorized("Authentication required for this endpoint.") unless request.auth?.credentials?.id
-        usernameOrIdOrMe = request.auth.credentials.id
+      usernameOrIdOrMe = fbUsernameFromRequest request
+      return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
 
       methodsUsers().delete options.accountId,usernameOrIdOrMe,null, (err,user) ->
         ###
@@ -188,11 +190,8 @@ module.exports = (plugin,options = {}) ->
         params: validationSchemas.paramsUsersPatch
         payload: validationSchemas.payloadUsersPatch
     handler: (request, reply) ->
-      usernameOrIdOrMe = request.params.usernameOrIdOrMe
-
-      if usernameOrIdOrMe.toLowerCase() is 'me'
-        return reply Boom.unauthorized("Authentication required for this endpoint.") unless request.auth?.credentials?.id
-        usernameOrIdOrMe = request.auth.credentials.id
+      usernameOrIdOrMe = fbUsernameFromRequest request
+      return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
 
       methodsUsers().patch options.accountId, usernameOrIdOrMe,request.payload,null,  (err,user) ->
         return reply err if err
@@ -218,11 +217,8 @@ module.exports = (plugin,options = {}) ->
       validate:
         params: validationSchemas.paramsUsersGet
     handler: (request, reply) ->
-      usernameOrIdOrMe = request.params.usernameOrIdOrMe
-
-      if usernameOrIdOrMe.toLowerCase() is 'me'
-        return reply Boom.unauthorized("Authentication required for this endpoint.") unless request.auth?.credentials?.id
-        usernameOrIdOrMe = request.auth.credentials.id
+      usernameOrIdOrMe = fbUsernameFromRequest request
+      return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
 
       methodsUsers().getByNameOrId options.accountId, usernameOrIdOrMe,null,  (err,user) ->
         return reply err if err

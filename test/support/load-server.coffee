@@ -12,8 +12,6 @@ testPort = 5675
 testHost = "localhost"
 loggingEnabled = false
 
-
-
 module.exports = loadServer = (cb) ->
   server = new Hapi.Server testPort,testHost,{}
 

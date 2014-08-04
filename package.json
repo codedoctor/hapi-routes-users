@@ -1,6 +1,6 @@
 {
   "name": "hapi-routes-users",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "main": "lib/index.js",
   "repository": {
@@ -29,7 +29,7 @@
     "grunt-cli": "0.1.13",
     "grunt-contrib-coffee": "0.10.1",
     "grunt-contrib-watch": "0.6.1",
-    "grunt-codo" : "0.2.0", 
+    "grunt-codo": "0.2.0",
     "grunt-env": "0.4.1",
     "grunt-mocha-cov": "0.2.1",
     "grunt-mocha-test": "0.11.0",

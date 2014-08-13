@@ -2,7 +2,7 @@ fixtures = require './fixtures'
 
 module.exports = (server,cb) ->
   data = 
-    accountId: fixtures.accountId
+    _tenantId: fixtures._tenantId
     name : 'codedoctor'
     websiteUrl: 'http://somesite.com'
     imageUrl: null
@@ -25,7 +25,7 @@ module.exports = (server,cb) ->
       tokensGranted : 0
       tokensRevoked : 0
 
-  methods = server.pack.plugins['hapi-identity-store'].methods
-  methods.oauthApps.create fixtures.accountId,data,null, (err,app) ->
+  methods = server.pack.plugins['hapi-oauth-store-multi-tenant'].methods
+  methods.oauthApps.create fixtures._tenantId,data,null, (err,app) ->
     return cb err if err
     cb null

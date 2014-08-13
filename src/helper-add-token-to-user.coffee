@@ -3,10 +3,10 @@ Boom = require 'boom'
 
 helperObjToRest = require './helper-obj-to-rest'
 
-module.exports = (oauthAuth, baseUrl,accountId,userId, clientId, realm, scope ,user, cb) ->
+module.exports = (oauthAuth, baseUrl,_tenantId,userId, clientId, realm, scope ,user, cb) ->
 
   if clientId
-    oauthAuth.createOrReuseTokenForUserId accountId,userId, clientId, realm,scope, null, (err, token) =>
+    oauthAuth.createOrReuseTokenForUserId _tenantId,userId, clientId, realm,scope, null, (err, token) =>
       return cb err if err
       return cb new Boom.badRequest("#{baseUrl}/users") unless token
 

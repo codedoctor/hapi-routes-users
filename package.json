@@ -1,6 +1,6 @@
 {
   "name": "hapi-routes-users",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "private": false,
   "main": "lib/index.js",
   "repository": {
@@ -12,13 +12,16 @@
   },
   "description": "Provides API endpoints for HAPI servers to manage users. DO NOT USE YET",
   "dependencies": {
-    "hoek": ">=2.3.0",
+    "api-pagination": ">=1.0.6",
+    "hoek": ">=2.4.1",
     "boom": ">=2.4.2",
-    "joi": ">=4.6.1",
+    "joi": ">=4.6.2",
     "underscore": ">=1.6.0"
   },
   "peerDependencies": {
-    "hapi": ">=6.2.1"
+    "hapi": ">=6.4.0",
+    "hapi-oauth-store-multi-tenant": ">=1.0.0",
+    "hapi-user-store-multi-tenant": ">=1.0.0"
   },
   "devDependencies": {
     "async": "0.9.0",
@@ -27,19 +30,20 @@
     "coffee-script": "1.7.1",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
-    "grunt-contrib-coffee": "0.10.1",
+    "grunt-contrib-coffee": "0.11.0",
     "grunt-contrib-watch": "0.6.1",
     "grunt-codo": "0.2.0",
     "grunt-env": "0.4.1",
-    "grunt-mocha-cov": "0.2.1",
+    "grunt-mocha-cov": "0.3.0",
     "grunt-mocha-test": "0.11.0",
     "grunt-release": "0.7.0",
     "grunt-shell": "0.7.0",
-    "hapi": "6.2.1",
-    "hapi-identity-store": "1.0.1",
+    "hapi": "6.5.0",
+    "hapi-oauth-store-multi-tenant": "1.0.x",
+    "hapi-user-store-multi-tenant": "1.0.x",
     "matchdep": "0.3.0",
-    "mocha": "1.21.3",
-    "mongoose": "3.8.13",
+    "mocha": "1.21.4",
+    "mongoose": "3.8.14",
     "should": "4.0.4"
   },
   "config": {

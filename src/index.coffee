@@ -6,7 +6,7 @@ routes = require './routes'
 ###
 options:
   clientId: 'some mongodb guid'
-  accountId: 'some mongodb guid'
+  _tenantId: 'some mongodb guid'
   baseUrl: This is the url to your api. For example https://api.mystuff.com
 ``realm: ignore for now
   scope: leave to null

@@ -1,7 +1,9 @@
 _ = require 'underscore'
 databaseCleaner = require './database-cleaner'
 Hapi = require "hapi"
-hapiIdentityStore = require 'hapi-identity-store'
+hapiUserStoreMultiTenant = require 'hapi-user-store-multi-tenant'
+hapiOauthStoreMultiTenant = require 'hapi-oauth-store-multi-tenant'
+
 index = require '../../lib/index'
 mongoose = require 'mongoose'
 
@@ -16,12 +18,14 @@ module.exports = loadServer = (cb) ->
   server = new Hapi.Server testPort,testHost,{}
 
   pluginConf = [
-      plugin: hapiIdentityStore
+      plugin: hapiUserStoreMultiTenant
+    ,
+      plugin: hapiOauthStoreMultiTenant
     ,
       plugin: index
       options:
         clientId:  fixtures.clientId
-        accountId: fixtures.accountId
+        _tenantId: fixtures._tenantId
         baseUrl: "http://localhost:#{testPort}"
         realm: 'codedoctor'
         scope: null

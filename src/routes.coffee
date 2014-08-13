@@ -4,15 +4,15 @@ Hoek = require "hoek"
 Joi = require "joi"
 url = require 'url'
 
-protoGetAll = require './proto-get-all'
 helperAddTokenToUser = require './helper-add-token-to-user'
-validationSchemas = require './validation-schemas'
-i18n = require './i18n'
 helperObjToRest = require './helper-obj-to-rest'
+i18n = require './i18n'
+protoGetAll = require './proto-get-all'
+validationSchemas = require './validation-schemas'
 
 module.exports = (plugin,options = {}) ->
   Hoek.assert options.clientId,"options parameter requires a clientId"
-  Hoek.assert options.accountId,"options parameter requires an accountId"
+  Hoek.assert options._tenantId,"options parameter requires an _tenantId"
   Hoek.assert options.baseUrl,"options parameter requires an baseUrl"
   Hoek.assert options.realm,"options parameter requires a realm"
 
@@ -21,11 +21,13 @@ module.exports = (plugin,options = {}) ->
 
   options.scope ||= null
 
-  hapiIdentityStore = -> plugin.plugins['hapi-identity-store']
-  Hoek.assert hapiIdentityStore(),"Could not find 'hapi-identity-store' plugin."
+  hapiOauthStoreMultiTenant = -> plugin.plugins['hapi-oauth-store-multi-tenant']
+  hapiUserStoreMultiTenant = -> plugin.plugins['hapi-user-store-multi-tenant']
+  Hoek.assert hapiOauthStoreMultiTenant(),"Could not find 'hapi-oauth-store-multi-tenant' plugin."
+  Hoek.assert hapiUserStoreMultiTenant(),"Could not find 'hapi-user-store-multi-tenant' plugin."
 
-  methodsUsers = -> hapiIdentityStore().methods.users
-  methodsOauthAuth = -> hapiIdentityStore().methods.oauthAuth
+  methodsUsers = -> hapiUserStoreMultiTenant().methods.users
+  methodsOauthAuth = -> hapiOauthStoreMultiTenant().methods.oauthAuth
 
   Hoek.assert methodsUsers(),"Could not find 'methods.users' in 'hapi-identity-store' plugin."
   Hoek.assert methodsOauthAuth(),"Could not find  'methods.oauthAuth' in 'hapi-identity-store' plugin."
@@ -48,7 +50,7 @@ module.exports = (plugin,options = {}) ->
     return usernameOrIdOrMe
 
 
-  protoGetAll plugin,"users",methodsUsers(),options.accountId, null,null
+  protoGetAll plugin,"users",methodsUsers(),options._tenantId,options.baseUrl, null,null
 
   ###
   Creates a new user and returns it and the new session.
@@ -61,10 +63,10 @@ module.exports = (plugin,options = {}) ->
       validate:
         payload: validationSchemas.payloadUsersPost
     handler: (request, reply) ->
-      methodsUsers().create options.accountId,request.payload, {}, (err,user) ->
+      methodsUsers().create options._tenantId,request.payload, {}, (err,user) ->
         return reply err if err
 
-        helperAddTokenToUser methodsOauthAuth(), options.baseUrl,options.accountId,user._id,options.clientId,options.realm,options.scope,user, (err, userWithToken) ->
+        helperAddTokenToUser methodsOauthAuth(), options.baseUrl,options._tenantId,user._id,options.clientId,options.realm,options.scope,user, (err, userWithToken) ->
           return reply err if err
           reply(userWithToken).code(201)
 
@@ -81,7 +83,7 @@ module.exports = (plugin,options = {}) ->
         payload: validationSchemas.payloadUsersResetPasswordPost
     handler: (request, reply) ->
 
-      methodsUsers().resetPassword options.accountId,request.payload.login,null, (err,user,token) ->
+      methodsUsers().resetPassword options._tenantId,request.payload.login,null, (err,user,token) ->
         return reply err if err
         return reply Boom.create(400,"Unable to retrieve password.") unless user and token
 
@@ -117,7 +119,7 @@ module.exports = (plugin,options = {}) ->
       token = request.payload.token
       password = request.payload.password
 
-      methodsUsers().resetPasswordToken options.accountId,token,password, (err,user) ->
+      methodsUsers().resetPasswordToken options._tenantId,token,password, (err,user) ->
         return reply err if err
 
 
@@ -146,7 +148,7 @@ module.exports = (plugin,options = {}) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
       return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
 
-      methodsUsers().patch options.accountId, usernameOrIdOrMe,password : request.payload.password,null,  (err,user) ->
+      methodsUsers().patch options._tenantId, usernameOrIdOrMe,password : request.payload.password,null,  (err,user) ->
         return reply err if err
 
         primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
@@ -173,7 +175,7 @@ module.exports = (plugin,options = {}) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
       return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
 
-      methodsUsers().delete options.accountId,usernameOrIdOrMe,null, (err,user) ->
+      methodsUsers().delete options._tenantId,usernameOrIdOrMe,null, (err,user) ->
         ###
         @TODO Warning: we should eat not found error here.
         ###
@@ -193,7 +195,7 @@ module.exports = (plugin,options = {}) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
       return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
 
-      methodsUsers().patch options.accountId, usernameOrIdOrMe,request.payload,null,  (err,user) ->
+      methodsUsers().patch options._tenantId, usernameOrIdOrMe,request.payload,null,  (err,user) ->
         return reply err if err
 
         primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
@@ -220,7 +222,7 @@ module.exports = (plugin,options = {}) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
       return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
 
-      methodsUsers().getByNameOrId options.accountId, usernameOrIdOrMe,null,  (err,user) ->
+      methodsUsers().getByNameOrId options._tenantId, usernameOrIdOrMe,null,  (err,user) ->
         return reply err if err
 
         reply(helperObjToRest.user user, "#{options.baseUrl}/users")

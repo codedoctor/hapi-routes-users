@@ -45,6 +45,7 @@
     <pre><code class='coffeescript'>{
   identity: function(identity, baseUrl) {
     var res;
+    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
     if (!identity) {
       return null;
     }
@@ -64,6 +65,7 @@
   },
   user: function(user, baseUrl) {
     var localUrl, res;
+    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
     if (!user) {
       return null;
     }
@@ -104,6 +106,7 @@
   },
   oauthApp: function(oauthApp, baseUrl) {
     var localUrl, notRevokedClients, res;
+    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
     if (!oauthApp) {
       return null;
     }
@@ -144,6 +147,7 @@
   },
   organization: function(organization, baseUrl) {
     var res;
+    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
     if (!organization) {
       return null;
     }
@@ -168,6 +172,7 @@
   },
   oauthClient: function(oauthClient, baseUrl) {
     var res;
+    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
     if (!oauthClient) {
       return null;
     }
@@ -183,6 +188,7 @@
   },
   scope: function(scope, baseUrl) {
     var res;
+    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
     if (!scope) {
       return null;
     }
@@ -202,7 +208,7 @@
 </dl>
     </div>
     <div id='footer'>
-  August 13, 14 16:18:41 by
+  August 13, 14 16:55:39 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>

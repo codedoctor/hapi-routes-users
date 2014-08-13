@@ -11,13 +11,13 @@ protoGetAll = require './proto-get-all'
 validationSchemas = require './validation-schemas'
 
 module.exports = (plugin,options = {}) ->
-  Hoek.assert options.clientId,"options parameter requires a clientId"
-  Hoek.assert options._tenantId,"options parameter requires an _tenantId"
-  Hoek.assert options.baseUrl,"options parameter requires an baseUrl"
-  Hoek.assert options.realm,"options parameter requires a realm"
+  Hoek.assert options.clientId,i18n.assertClientIdInOptionsRequired
+  Hoek.assert options._tenantId,i18n.assertTenantIdInOptionsRequired
+  Hoek.assert options.baseUrl,i18n.assertBaseUrlInOptionsRequired
+  Hoek.assert options.realm,i18n.assertRealmInOptionsRequired
 
-  Hoek.assert options.sendEmail,"options parameter requires a sendEmail (kind,email,payload,cb) -> function"
-  Hoek.assert _.isFunction(options.sendEmail),"options parameter requires sendEmail to be a function"
+  Hoek.assert options.sendEmail,i18n.assertSendEmailInOptionsRequired
+  Hoek.assert _.isFunction(options.sendEmail),i18n.assertSendEmailInOptionsIsFunction
 
   options.scope ||= null
 
@@ -29,8 +29,8 @@ module.exports = (plugin,options = {}) ->
   methodsUsers = -> hapiUserStoreMultiTenant().methods.users
   methodsOauthAuth = -> hapiOauthStoreMultiTenant().methods.oauthAuth
 
-  Hoek.assert methodsUsers(),"Could not find 'methods.users' in 'hapi-identity-store' plugin."
-  Hoek.assert methodsOauthAuth(),"Could not find  'methods.oauthAuth' in 'hapi-identity-store' plugin."
+  Hoek.assert methodsUsers(),i18n.assertMethodsUsersNotFound
+  Hoek.assert methodsOauthAuth(),i18n.assertMethodsOauthAuthNotFound
 
   fnSendEmail = (kind,email,payload) ->
     # Send email is run outside this tick, and we only care about the result for loggin purposes.
@@ -38,7 +38,7 @@ module.exports = (plugin,options = {}) ->
       if err
         data = 
           payload: payload
-          msg: "Failed to send email."
+          msg: i18n.errorFailedToSendEmail
         plugin.log ['error','customer-support-likely'], data 
 
   fbUsernameFromRequest = (request) ->
@@ -85,7 +85,7 @@ module.exports = (plugin,options = {}) ->
 
       methodsUsers().resetPassword options._tenantId,request.payload.login,null, (err,user,token) ->
         return reply err if err
-        return reply Boom.create(400,"Unable to retrieve password.") unless user and token
+        return reply Boom.badRequest(errorUnableToRetrievePassword) unless user and token
 
         primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
         sendAttempt = !!primaryEmail
@@ -146,7 +146,7 @@ module.exports = (plugin,options = {}) ->
         payload: validationSchemas.payloadUsersPasswordPut
     handler: (request, reply) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
-      return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
+      return reply Boom.unauthorized(i18n.errorUnauthorized) unless usernameOrIdOrMe
 
       methodsUsers().patch options._tenantId, usernameOrIdOrMe,password : request.payload.password,null,  (err,user) ->
         return reply err if err
@@ -173,7 +173,7 @@ module.exports = (plugin,options = {}) ->
         params: validationSchemas.paramsUsersDelete
     handler: (request, reply) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
-      return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
+      return reply Boom.unauthorized(i18n.errorUnauthorized) unless usernameOrIdOrMe
 
       methodsUsers().delete options._tenantId,usernameOrIdOrMe,null, (err,user) ->
         ###
@@ -193,7 +193,7 @@ module.exports = (plugin,options = {}) ->
         payload: validationSchemas.payloadUsersPatch
     handler: (request, reply) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
-      return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
+      return reply Boom.unauthorized(i18n.errorUnauthorized) unless usernameOrIdOrMe
 
       methodsUsers().patch options._tenantId, usernameOrIdOrMe,request.payload,null,  (err,user) ->
         return reply err if err
@@ -220,7 +220,7 @@ module.exports = (plugin,options = {}) ->
         params: validationSchemas.paramsUsersGet
     handler: (request, reply) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
-      return reply Boom.unauthorized("Authentication required for this endpoint.") unless usernameOrIdOrMe
+      return reply Boom.unauthorized(i18n.errorUnauthorized) unless usernameOrIdOrMe
 
       methodsUsers().getByNameOrId options._tenantId, usernameOrIdOrMe,null,  (err,user) ->
         return reply err if err

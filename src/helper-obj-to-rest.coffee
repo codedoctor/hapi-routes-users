@@ -1,8 +1,12 @@
 _ = require 'underscore'
+Hoek = require 'hoek'
+i18n = require './i18n'
 
 module.exports =
 
   identity: (identity,baseUrl) ->
+    Hoek.assert baseUrl,i18n.assertBaseUrlRequired
+
     return null unless identity
     res =
       _url : "#{baseUrl}/#{identity._id}"
@@ -18,6 +22,8 @@ module.exports =
     res
 
   user: (user,baseUrl) ->
+    Hoek.assert baseUrl,i18n.assertBaseUrlRequired
+
     return null unless user
 
     localUrl = "#{baseUrl}/#{user._id}"
@@ -59,6 +65,8 @@ module.exports =
 
 
   oauthApp: (oauthApp,baseUrl) ->
+    Hoek.assert baseUrl,i18n.assertBaseUrlRequired
+
     return null unless oauthApp
 
     notRevokedClients =  _.filter( oauthApp.clients || [], (x) -> !x.revokedAt)
@@ -93,6 +101,8 @@ module.exports =
     res
 
   organization: (organization,baseUrl) ->
+    Hoek.assert baseUrl,i18n.assertBaseUrlRequired
+
     return null unless organization
     res = 
       _url : "#{baseUrl}/#{organization._id}"
@@ -113,6 +123,8 @@ module.exports =
     res
 
   oauthClient:  (oauthClient,baseUrl) ->
+    Hoek.assert baseUrl,i18n.assertBaseUrlRequired
+
     return null unless oauthClient
     res = 
       _url : "#{baseUrl}/#{oauthClient._id}"
@@ -124,6 +136,8 @@ module.exports =
     res
 
   scope: (scope,baseUrl) ->
+    Hoek.assert baseUrl,i18n.assertBaseUrlRequired
+ 
     return null unless scope
     res =
       slug : scope.name

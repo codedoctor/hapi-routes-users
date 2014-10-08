@@ -2,17 +2,22 @@
 
 module.exports = 
   ###
-  Do not translate
+  Do not translate, and keep lowercase
   ###
-  emailKindPasswordReset : 'passwordReset'
+  emailKindPasswordReset : 'passwordreset'
   ###
-  Do not translate
+  Do not translate, and keep lowercase
   ###
-  emailKindPasswordResetSuccess : 'passwordResetSuccess'
+  emailKindPasswordResetSuccess : 'passwordresetsuccess'
   ###
-  Do not translate
+  Do not translate, and keep lowercase
   ###
-  emailKindPasswordChanged : 'passwordChanged'
+  emailKindPasswordChanged : 'passwordchanged'
+
+  ###
+  Do not translate, and keep lowercase
+  ###
+  emailKindNewUser: 'newuser'
 
   assertDbMethodsRequired: "The required parameter 'dbMethods' is missing."
   assertDbMethodsAllRequired: "The parameter 'dbMethods' missed an 'all' method."

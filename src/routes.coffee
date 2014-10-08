@@ -70,6 +70,22 @@ module.exports = (plugin,options = {}) ->
           return reply err if err
           reply(userWithToken).code(201)
 
+        ###
+        Secondary Flow
+        ###
+        primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
+        sendAttempt = !!primaryEmail
+
+        if sendAttempt
+          payload =
+            dislayName: user.displayName || user.username
+            user: user
+            trackingId: user._id
+            trackingClass: 'User'
+
+          fnSendEmail i18n.emailKindNewUser, primaryEmail,payload
+
+
   ###
   Posts a request for a password reset token.
   requires a login as input parameter, which can be username or password

@@ -135,7 +135,7 @@ module.exports = (plugin,options = {}) ->
       token = request.payload.token
       password = request.payload.password
 
-      methodsUsers().resetPasswordToken options._tenantId,token,password, (err,user) ->
+      methodsUsers().resetPasswordToken options._tenantId,token,password,{}, (err,user) ->
         return reply err if err
 
 

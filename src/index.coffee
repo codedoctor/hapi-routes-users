@@ -10,6 +10,7 @@ options:
   baseUrl: This is the url to your api. For example https://api.mystuff.com
 ``realm: ignore for now
   scope: leave to null
+  resetPasswordClientBaseUrl: MUST BE SET, something like http://fanignite.com/users/reset-password/reset
 ###
 module.exports.register = (plugin, options = {}, cb) ->
 

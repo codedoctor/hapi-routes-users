@@ -73,8 +73,8 @@ module.exports = (plugin,options = {}) ->
         ###
         Secondary Flow
         ###
-        primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
-        sendAttempt = !!primaryEmail
+        primaryEmail = user.primaryEmail 
+        sendAttempt = !!primaryEmail && user.primaryEmail.length > 5
 
         if sendAttempt
           payload =
@@ -103,8 +103,8 @@ module.exports = (plugin,options = {}) ->
         return reply err if err
         return reply Boom.badRequest(errorUnableToRetrievePassword) unless user and token
 
-        primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
-        sendAttempt = !!primaryEmail
+        primaryEmail = user.primaryEmail 
+        sendAttempt = !!primaryEmail && user.primaryEmail.length > 5
 
 
         if sendAttempt
@@ -114,7 +114,7 @@ module.exports = (plugin,options = {}) ->
             trackingId: user._id
             trackingClass: 'User'
             token: token
-            resetUrl : "http://fanignite.com/users/reset-password/reset?token=#{token}"
+            resetUrl : "#{options.resetPasswordClientBaseUrl}?token=#{token}"
 
           fnSendEmail i18n.emailKindPasswordReset, primaryEmail,payload
 
@@ -139,8 +139,8 @@ module.exports = (plugin,options = {}) ->
         return reply err if err
 
 
-        primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
-        sendAttempt = !!primaryEmail
+        primaryEmail = user.primaryEmail 
+        sendAttempt = !!primaryEmail && user.primaryEmail.length > 5
 
         if sendAttempt
           payload =
@@ -167,8 +167,8 @@ module.exports = (plugin,options = {}) ->
       methodsUsers().patch options._tenantId, usernameOrIdOrMe,password : request.payload.password,null,  (err,user) ->
         return reply err if err
 
-        primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
-        sendAttempt = !!primaryEmail
+        primaryEmail = user.primaryEmail 
+        sendAttempt = !!primaryEmail && user.primaryEmail.length > 5
 
         if sendAttempt
           payload =
@@ -214,8 +214,8 @@ module.exports = (plugin,options = {}) ->
       methodsUsers().patch options._tenantId, usernameOrIdOrMe,request.payload,null,  (err,user) ->
         return reply err if err
 
-        primaryEmail = user.primaryEmail && user.primaryEmail.length > 5
-        sendAttempt = !!primaryEmail && request.payload.password
+        primaryEmail = user.primaryEmail 
+        sendAttempt = !!primaryEmail && request.payload.password && user.primaryEmail.length > 5
 
         if sendAttempt
           payload =

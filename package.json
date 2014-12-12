@@ -1,6 +1,6 @@
 {
   "name": "hapi-routes-users",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": false,
   "main": "lib/index.js",
   "repository": {

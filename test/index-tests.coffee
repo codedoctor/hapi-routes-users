@@ -19,8 +19,6 @@ describe 'index has been loaded', ->
       return cb err if err
 
       should.exist server
-      server.should.have.property "pack"
-
-      should.exist server.pack.plugins['hapi-routes-users']
+      should.exist server.plugins['hapi-routes-users']
 
       cb null

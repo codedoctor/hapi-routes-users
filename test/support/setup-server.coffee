@@ -16,16 +16,14 @@ module.exports = (server,cb) ->
     organizationName: 'codedoctor'
     organizationUrl: 'http://somesite.com'
     tosAcceptanceDate : null
-    clients: [
-      clientId: fixtures.clientId
-    ]
+    clientId: fixtures.clientId
 
     redirectUrls: []
     stat: 
       tokensGranted : 0
       tokensRevoked : 0
 
-  methods = server.pack.plugins['hapi-oauth-store-multi-tenant'].methods
+  methods = server.plugins['hapi-oauth-store-multi-tenant'].methods
   methods.oauthApps.create fixtures._tenantId,data,null, (err,app) ->
     return cb err if err
     cb null

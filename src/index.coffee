@@ -1,8 +1,11 @@
 Hoek = require 'hoek'
 
 i18n = require './i18n'
-routes = require './routes'
 
+routesToExport = [
+  require './routes'
+  require './routes-users-usernameoridorme-patch'
+]
 ###
 options:
   clientId: 'some mongodb guid'
@@ -18,7 +21,7 @@ module.exports.register = (server, options = {}, cb) ->
     realm: "default"
   options = Hoek.applyToDefaults defaults, options
 
-  routes server,options
+  r server,options for r in routesToExport
 
   server.expose 'i18n',i18n
 

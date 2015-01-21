@@ -200,33 +200,6 @@ module.exports = (plugin,options = {}) ->
         reply().code(204)
 
 
-  plugin.route
-    path: "/users/{usernameOrIdOrMe}"
-    method: "PATCH"
-    config:
-      validate:
-        params: validationSchemas.paramsUsersPatch
-        payload: validationSchemas.payloadUsersPatch
-    handler: (request, reply) ->
-      usernameOrIdOrMe = fbUsernameFromRequest request
-      return reply Boom.unauthorized(i18n.errorUnauthorized) unless usernameOrIdOrMe
-
-      methodsUsers().patch options._tenantId, usernameOrIdOrMe,request.payload,null,  (err,user) ->
-        return reply err if err
-
-        primaryEmail = user.primaryEmail 
-        sendAttempt = !!primaryEmail && request.payload.password && user.primaryEmail.length > 5
-
-        if sendAttempt
-          payload =
-            dislayName: user.displayName || user.username
-            user: user
-            trackingId: user._id
-            trackingClass: 'User'
-
-          fnSendEmail i18n.emailKindPasswordChanged, primaryEmail,payload
-
-        reply(helperObjToRest.user user, "#{options.baseUrl}/users").code(204)
 
   plugin.route
     path: "/users/{usernameOrIdOrMe}"

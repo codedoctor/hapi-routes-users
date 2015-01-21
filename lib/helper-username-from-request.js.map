@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "helper-username-from-request.js",
+  "sourceRoot": "../src/",
+  "sources": [
+    "helper-username-from-request.coffee"
+  ],
+  "names": [],
+  "mappings": "AACA;AAAA,EAAA,MAAM,CAAC,OAAP,GAAiB,SAAC,OAAD,GAAA;AACb,QAAA,6BAAA;AAAA,IAAA,gBAAA,GAAmB,OAAO,CAAC,MAAM,CAAC,gBAAlC,CAAA;AAEA,IAAA,IAAG,gBAAgB,CAAC,WAAjB,CAAA,CAAA,KAAkC,IAArC;AACE,MAAA,IAAA,CAAA,2EAA4C,CAAE,qBAA9C;AAAA,eAAO,IAAP,CAAA;OAAA;AAAA,MACA,gBAAA,GAAmB,OAAO,CAAC,IAAI,CAAC,WAAW,CAAC,EAD5C,CADF;KAFA;AAKA,WAAO,gBAAP,CANa;EAAA,CAAjB,CAAA;AAAA"
+}

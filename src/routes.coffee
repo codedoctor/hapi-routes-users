@@ -78,7 +78,9 @@ module.exports = (plugin,options = {}) ->
 
         if sendAttempt
           payload =
-            dislayName: user.displayName || user.username
+            displayName: user.displayName || user.username
+            username: user.username
+            email: user.primaryEmail
             user: user
             trackingId: user._id
             trackingClass: 'User'
@@ -109,7 +111,9 @@ module.exports = (plugin,options = {}) ->
 
         if sendAttempt
           payload =
-            dislayName: user.displayName || user.username
+            displayName: user.displayName || user.username
+            username: user.username
+            email: user.primaryEmail
             user: user
             trackingId: user._id
             trackingClass: 'User'
@@ -144,8 +148,10 @@ module.exports = (plugin,options = {}) ->
 
         if sendAttempt
           payload =
-            dislayName: user.displayName || user.username
+            displayName: user.displayName || user.username
             user: user
+            username: user.username
+            email: user.primaryEmail
             trackingId: user._id
             trackingClass: 'User'
 
@@ -172,8 +178,10 @@ module.exports = (plugin,options = {}) ->
 
         if sendAttempt
           payload =
-            dislayName: user.displayName || user.username
+            displayName: user.displayName || user.username
             user: user
+            username: user.username
+            email: user.primaryEmail
             trackingId: user._id
             trackingClass: 'User'
 

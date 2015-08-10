@@ -50,7 +50,7 @@
       return null;
     }
     res = {
-      _url: &quot;&quot; + baseUrl + &quot;&#47;&quot; + identity._id,
+      _url: baseUrl + &quot;&#47;&quot; + identity._id,
       id: identity._id,
       provider: identity.provider,
       key: identity.key,
@@ -69,7 +69,7 @@
     if (!user) {
       return null;
     }
-    localUrl = &quot;&quot; + baseUrl + &quot;&#47;&quot; + user._id;
+    localUrl = baseUrl + &quot;&#47;&quot; + user._id;
     res = {
       _url: localUrl,
       id: user._id,
@@ -77,7 +77,7 @@
       displayName: user.displayName,
       description: user.description,
       identities: _.map(user.identities || [], function(x) {
-        return module.exports.identity(x, &quot;&quot; + localUrl + &quot;&#47;identities&quot;);
+        return module.exports.identity(x, localUrl + &quot;&#47;identities&quot;);
       }),
       profileLinks: user.profileLinks || [],
       userImages: user.userImages || [],
@@ -113,7 +113,7 @@
     notRevokedClients = _.filter(oauthApp.clients || [], function(x) {
       return !x.revokedAt;
     });
-    localUrl = &quot;&quot; + baseUrl + &quot;&#47;&quot; + oauthApp._id;
+    localUrl = baseUrl + &quot;&#47;&quot; + oauthApp._id;
     res = {
       _url: localUrl,
       id: oauthApp._id,
@@ -131,7 +131,7 @@
       organizationUrl: oauthApp.organizationUrl,
       tosAcceptanceDate: oauthApp.tosAcceptanceDate,
       clients: _.map(notRevokedClients, function(x) {
-        return module.exports.oauthClient(x, &quot;&quot; + localUrl + &quot;&#47;clients&quot;);
+        return module.exports.oauthClient(x, localUrl + &quot;&#47;clients&quot;);
       }),
       redirectUrls: oauthApp.redirectUrls,
       stats: oauthApp.stats,
@@ -152,7 +152,7 @@
       return null;
     }
     res = {
-      _url: &quot;&quot; + baseUrl + &quot;&#47;&quot; + organization._id,
+      _url: baseUrl + &quot;&#47;&quot; + organization._id,
       id: organization._id,
       name: organization.name,
       description: organization.description,
@@ -177,7 +177,7 @@
       return null;
     }
     res = {
-      _url: &quot;&quot; + baseUrl + &quot;&#47;&quot; + oauthClient._id,
+      _url: baseUrl + &quot;&#47;&quot; + oauthClient._id,
       id: oauthClient._id,
       clientId: oauthClient.clientId,
       secret: oauthClient.secret,
@@ -199,7 +199,7 @@
       developerDescription: scope.developerDescription || &#39;&#39;,
       roles: scope.roles || []
     };
-    res.url = &quot;&quot; + baseUrl + &quot;&#47;&quot; + scope.name;
+    res.url = baseUrl + &quot;&#47;&quot; + scope.name;
     return res;
   }
 }</code></pre>
@@ -208,11 +208,11 @@
 </dl>
     </div>
     <div id='footer'>
-  August 10, 15 06:22:28 by
+  August 10, 15 06:46:52 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>
-  2.0.9
+  2.0.11
   &#10034;
   Press H to see the keyboard shortcuts
   &#10034;

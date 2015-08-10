@@ -56,7 +56,7 @@ module.exports = (plugin,options = {}) ->
         payload: Joi.object().keys(
                                 username: Joi.string()
                                 displayName: Joi.string()
-                                roles : [Joi.string(),Joi.array().includes(Joi.string())]
+                                roles : [Joi.string(),Joi.array().items(Joi.string())]
                                 password: validationSchemas.validatePassword.description('The new password for the user.')
                                 #primaryEmail: Joi.string().email()
                                   ).options({ allowUnknown: true, stripUnknown: true })

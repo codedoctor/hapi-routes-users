@@ -4,13 +4,8 @@ mongoose = require "mongoose"
 apiPagination = require 'api-pagination'
 i18n = require './i18n'
 
-parseMyInt = (someValue, def = 0) ->
-  try
-    x = parseInt((someValue || def).toString(), 10)
-    x = 0 if x < 0
-    return x
-  catch e
-    return def
+helperParseMyInt = require './helper-parse-my-int'
+
 
 module.exports = protoGetAll = (plugin,endpoint,dbMethods,_tenantId,baseUrl,requestHelper,routeInfo = {}) ->
     Hoek.assert plugin,i18n.assertPluginRequired
@@ -24,8 +19,8 @@ module.exports = protoGetAll = (plugin,endpoint,dbMethods,_tenantId,baseUrl,requ
     routeInfo.handler = (request, reply) ->
 
       queryOptions = {}
-      queryOptions.offset = parseMyInt(request.query.offset,0)
-      queryOptions.count = parseMyInt(request.query.count,20)
+      queryOptions.offset = helperParseMyInt(request.query.offset,0)
+      queryOptions.count = helperParseMyInt(request.query.count,20)
 
       requestHelper(queryOptions,request) if requestHelper and _.isFunction(requestHelper)
 

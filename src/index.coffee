@@ -19,6 +19,8 @@ module.exports.register = (server, options = {}, cb) ->
 
   defaults =
     realm: "default"
+    routeTagsPublic: ['api','api-public','users']
+    routeTagsAdmin: ['api','api-admin','users']
   options = Hoek.applyToDefaults defaults, options
 
   r server,options for r in routesToExport

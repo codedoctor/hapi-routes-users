@@ -2,7 +2,7 @@ _ = require 'underscore'
 Boom = require 'boom'
 Hoek = require 'hoek'
 i18n = require './i18n'
-helperObjToRest = require './helper-obj-to-rest'
+helperObjToRestUser = require './helper-obj-to-rest-user'
 
 module.exports = (oauthAuthMethods, baseUrl,_tenantId,userId, clientId, realm, scope ,user, cb) ->
   if clientId
@@ -14,7 +14,7 @@ module.exports = (oauthAuthMethods, baseUrl,_tenantId,userId, clientId, realm, s
       return cb err if err
       return cb new Boom.badRequest(i18n.errorTokenRequired) unless token
 
-      user = helperObjToRest.user user, "#{baseUrl}/users"
+      user = helperObjToRestUser user, "#{baseUrl}/users"
       _.extend user,
         token:
           accessToken : token.accessToken
@@ -22,4 +22,4 @@ module.exports = (oauthAuthMethods, baseUrl,_tenantId,userId, clientId, realm, s
 
       cb null, user
   else
-    cb null, helperObjToRest.user user, "#{baseUrl}/users"
+    cb null, helperObjToRestUser user, "#{baseUrl}/users"

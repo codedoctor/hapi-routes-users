@@ -5,7 +5,7 @@ Joi = require "joi"
 url = require 'url'
 
 helperAddTokenToUser = require './helper-add-token-to-user'
-helperObjToRest = require './helper-obj-to-rest'
+helperObjToRestUser = require './helper-obj-to-rest-user'
 i18n = require './i18n'
 validationSchemas = require './validation-schemas'
 helperParseMyInt = require './helper-parse-my-int'
@@ -241,6 +241,6 @@ module.exports = (plugin,options = {}) ->
       methodsUsers().getByNameOrId options._tenantId, usernameOrIdOrMe,null,  (err,user) ->
         return reply err if err
 
-        reply(helperObjToRest.user user, "#{options.baseUrl}/users")
+        reply(helperObjToRestUser user, "#{options.baseUrl}/users")
 
 

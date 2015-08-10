@@ -43,26 +43,6 @@
   </dt>
   <dd>
     <pre><code class='coffeescript'>{
-  identity: function(identity, baseUrl) {
-    var res;
-    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
-    if (!identity) {
-      return null;
-    }
-    res = {
-      _url: baseUrl + &quot;&#47;&quot; + identity._id,
-      id: identity._id,
-      provider: identity.provider,
-      key: identity.key,
-      v1: identity.v1,
-      v2: identity.v2,
-      providerType: identity.providerType,
-      username: identity.username,
-      displayName: identity.displayName,
-      profileImage: identity.profileImage
-    };
-    return res;
-  },
   user: function(user, baseUrl) {
     var localUrl, res;
     Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
@@ -77,7 +57,7 @@
       displayName: user.displayName,
       description: user.description,
       identities: _.map(user.identities || [], function(x) {
-        return module.exports.identity(x, localUrl + &quot;&#47;identities&quot;);
+        return helperObjToRestIdentity(x, localUrl + &quot;&#47;identities&quot;);
       }),
       profileLinks: user.profileLinks || [],
       userImages: user.userImages || [],
@@ -103,104 +83,6 @@
       verified: user.verified
     };
     return res;
-  },
-  oauthApp: function(oauthApp, baseUrl) {
-    var localUrl, notRevokedClients, res;
-    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
-    if (!oauthApp) {
-      return null;
-    }
-    notRevokedClients = _.filter(oauthApp.clients || [], function(x) {
-      return !x.revokedAt;
-    });
-    localUrl = baseUrl + &quot;&#47;&quot; + oauthApp._id;
-    res = {
-      _url: localUrl,
-      id: oauthApp._id,
-      name: oauthApp.name,
-      description: oauthApp.description,
-      websiteUrl: oauthApp.websiteUrl,
-      imageUrl: oauthApp.imageUrl,
-      callbackUrl: oauthApp.callbackUrl,
-      notes: oauthApp.notes,
-      scopes: oauthApp.scopes,
-      revoked: oauthApp.revoked,
-      acceptTermsOfService: oauthApp.acceptTermsOfService,
-      isPublished: oauthApp.isPublished,
-      organizationName: oauthApp.organizationName,
-      organizationUrl: oauthApp.organizationUrl,
-      tosAcceptanceDate: oauthApp.tosAcceptanceDate,
-      clients: _.map(notRevokedClients, function(x) {
-        return module.exports.oauthClient(x, localUrl + &quot;&#47;clients&quot;);
-      }),
-      redirectUrls: oauthApp.redirectUrls,
-      stats: oauthApp.stats,
-      tags: oauthApp.tags,
-      createdAt: oauthApp.createdAt,
-      updatedAt: oauthApp.updatedAt,
-      createdByUserId: oauthApp.createdByUserId,
-      accessibleBy: oauthApp.accessibleBy,
-      isDeleted: oauthApp.isDeleted || false,
-      deletedAt: oauthApp.deletedAt || null
-    };
-    return res;
-  },
-  organization: function(organization, baseUrl) {
-    var res;
-    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
-    if (!organization) {
-      return null;
-    }
-    res = {
-      _url: baseUrl + &quot;&#47;&quot; + organization._id,
-      id: organization._id,
-      name: organization.name,
-      description: organization.description,
-      stats: organization.stats || {},
-      resourceLimits: organization.resourceLimits || {},
-      profileLinks: organization.profileLinks || [],
-      data: organization.data || {},
-      tags: organization.tags,
-      createdAt: organization.createdAt,
-      updatedAt: organization.updatedAt,
-      createdByUserId: organization.createdByUserId,
-      accessibleBy: organization.accessibleBy,
-      isDeleted: organization.isDeleted || false,
-      deletedAt: organization.deletedAt || null
-    };
-    return res;
-  },
-  oauthClient: function(oauthClient, baseUrl) {
-    var res;
-    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
-    if (!oauthClient) {
-      return null;
-    }
-    res = {
-      _url: baseUrl + &quot;&#47;&quot; + oauthClient._id,
-      id: oauthClient._id,
-      clientId: oauthClient.clientId,
-      secret: oauthClient.secret,
-      createdAt: oauthClient.createdAt,
-      revokedAt: oauthClient.revokedAt
-    };
-    return res;
-  },
-  scope: function(scope, baseUrl) {
-    var res;
-    Hoek.assert(baseUrl, i18n.assertBaseUrlRequired);
-    if (!scope) {
-      return null;
-    }
-    res = {
-      slug: scope.name,
-      name: scope.name,
-      description: scope.description || &#39;&#39;,
-      developerDescription: scope.developerDescription || &#39;&#39;,
-      roles: scope.roles || []
-    };
-    res.url = baseUrl + &quot;&#47;&quot; + scope.name;
-    return res;
   }
 }</code></pre>
     
@@ -208,7 +90,7 @@
 </dl>
     </div>
     <div id='footer'>
-  August 10, 15 06:53:38 by
+  August 10, 15 06:56:33 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>

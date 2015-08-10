@@ -5,7 +5,7 @@ Joi = require "joi"
 url = require 'url'
 
 helperAddTokenToUser = require './helper-add-token-to-user'
-helperObjToRest = require './helper-obj-to-rest'
+helperObjToRestUser = require './helper-obj-to-rest-user'
 i18n = require './i18n'
 
 validationSchemas = require './validation-schemas'
@@ -86,4 +86,4 @@ module.exports = (plugin,options = {}) ->
 
           fnSendEmail i18n.emailKindPasswordChanged, primaryEmail,payload
 
-        reply(helperObjToRest.user user, "#{options.baseUrl}/users").code(204)
+        reply(helperObjToRestUser user, "#{options.baseUrl}/users").code(204)

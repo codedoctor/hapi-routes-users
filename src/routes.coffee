@@ -7,8 +7,9 @@ url = require 'url'
 helperAddTokenToUser = require './helper-add-token-to-user'
 helperObjToRest = require './helper-obj-to-rest'
 i18n = require './i18n'
-protoGetAll = require './proto-get-all'
 validationSchemas = require './validation-schemas'
+helperParseMyInt = require './helper-parse-my-int'
+apiPagination = require 'api-pagination'
 
 module.exports = (plugin,options = {}) ->
   Hoek.assert options.clientId,i18n.assertClientIdInOptionsRequired
@@ -50,7 +51,25 @@ module.exports = (plugin,options = {}) ->
     return usernameOrIdOrMe
 
 
-  protoGetAll plugin,"users",methodsUsers(),options._tenantId,options.baseUrl, null,null
+  ###
+  Creates a new user and returns it and the new session.
+  ###
+  plugin.route
+    path: "/users"
+    method: "GET"
+    config: {}
+    handler: (request, reply) ->
+      queryOptions = {}
+      queryOptions.offset = helperParseMyInt(request.query.offset,0)
+      queryOptions.count = helperParseMyInt(request.query.count,20)
+
+      methodsUsers().all options._tenantId,queryOptions, (err,resultData) ->
+        return reply err if err
+
+        resultData = resultData.toObject() if resultData.toObject
+
+        reply apiPagination.toRest(resultData,options.baseUrl)
+
 
   ###
   Creates a new user and returns it and the new session.

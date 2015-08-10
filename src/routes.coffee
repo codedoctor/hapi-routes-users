@@ -80,7 +80,13 @@ module.exports = (plugin,options = {}) ->
     config:
       auth: false
       validate:
-        payload: validationSchemas.payloadUsersPost
+        payload: Joi.object().keys(
+                    username: validationSchemas.username.required().description('The username of the new user. Must be unique within the system.')
+                    name: validationSchemas.name.required().description("The real name of the new user.")
+                    password: validationSchemas.password.required().description("The password of the new user.")
+                    email: validationSchemas.email.required().description('The email of the new user. Must be unique within the system.')
+                  ).with('username', 'password','email','name').options({ allowUnknown: true, stripUnknown: true })
+
     handler: (request, reply) ->
       methodsUsers().create options._tenantId,request.payload, {}, (err,user) ->
         return reply err if err
@@ -117,7 +123,10 @@ module.exports = (plugin,options = {}) ->
     config:
       auth: false
       validate:
-        payload: validationSchemas.payloadUsersResetPasswordPost
+        payload: Joi.object().keys(
+                    login: validationSchemas.login.required().description('The login field can either be an email address or a username.')
+                    ).options({ allowUnknown: true, stripUnknown: true })
+
     handler: (request, reply) ->
 
       methodsUsers().resetPassword options._tenantId,request.payload.login,null, (err,user,token) ->
@@ -153,7 +162,10 @@ module.exports = (plugin,options = {}) ->
     config:
       auth: false
       validate:
-        payload: validationSchemas.payloadUsersResetPasswordTokensPost
+        payload: Joi.object().keys(
+                      password: validationSchemas.password.required().description('The new password for the user referenced by the token.')
+                      token: validationSchemas.token.required().description('The token obtained through a POST request at /users/reset-password.')
+                      ).options({ allowUnknown: true, stripUnknown: true })
     handler: (request, reply) ->
       token = request.payload.token
       password = request.payload.password
@@ -183,8 +195,12 @@ module.exports = (plugin,options = {}) ->
     method: "PUT"
     config:
       validate:
-        params: validationSchemas.paramsUsersPasswordPut
-        payload: validationSchemas.payloadUsersPasswordPut
+        params: Joi.object().keys(
+                    usernameOrIdOrMe: validationSchemas.usernameOrIdOrMe.required().description("The quantifier for the user to return. Can be a username, id or 'me'.")
+                  )
+        payload: Joi.object().keys(
+                    password: validationSchemas.password.required().description('The new password for the user.')
+                    ).options({ allowUnknown: true, stripUnknown: true })
     handler: (request, reply) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
       return reply Boom.unauthorized(i18n.errorUnauthorized) unless usernameOrIdOrMe
@@ -213,7 +229,9 @@ module.exports = (plugin,options = {}) ->
     method: "DELETE"
     config:
       validate:
-        params: validationSchemas.paramsUsersDelete
+        params: Joi.object().keys(
+                  usernameOrIdOrMe: validationSchemas.usernameOrIdOrMe.required().description("The quantifier for the user to return. Can be a username, id or 'me'.")
+                )
     handler: (request, reply) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
       return reply Boom.unauthorized(i18n.errorUnauthorized) unless usernameOrIdOrMe
@@ -233,7 +251,9 @@ module.exports = (plugin,options = {}) ->
     method: "GET"
     config:
       validate:
-        params: validationSchemas.paramsUsersGet
+        params: Joi.object().keys(
+                    usernameOrIdOrMe: validationSchemas.usernameOrIdOrMe.required().description("The quantifier for the user to return. Can be a username, id or 'me'.")
+                   )
     handler: (request, reply) ->
       usernameOrIdOrMe = fbUsernameFromRequest request
       return reply Boom.unauthorized(i18n.errorUnauthorized) unless usernameOrIdOrMe

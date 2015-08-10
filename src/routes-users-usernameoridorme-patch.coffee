@@ -51,13 +51,13 @@ module.exports = (plugin,options = {}) ->
     config:
       validate:
         params: Joi.object().keys(
-                  usernameOrIdOrMe: validationSchemas.validateUsernameOrIdOrMe.required() 
+                  usernameOrIdOrMe: validationSchemas.usernameOrIdOrMe.required() 
                     )
         payload: Joi.object().keys(
                                 username: Joi.string()
                                 displayName: Joi.string()
                                 roles : [Joi.string(),Joi.array().items(Joi.string())]
-                                password: validationSchemas.validatePassword.description('The new password for the user.')
+                                password: validationSchemas.password.description('The new password for the user.')
                                 #primaryEmail: Joi.string().email()
                                   ).options({ allowUnknown: true, stripUnknown: true })
 

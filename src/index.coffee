@@ -3,8 +3,14 @@ Hoek = require 'hoek'
 i18n = require './i18n'
 
 routesToExport = [
-  require './routes'
+  require './routes-users-get'
+  require './routes-users-post'
+  require './routes-users-usernameoridorme-get'
+  require './routes-users-usernameoridorme-delete'
+  require './routes-users-usernameoridorme-password-put'
   require './routes-users-usernameoridorme-patch'
+  require './routes-users-reset-password-post'
+  require './routes-users-reset-password-token-post'
 ]
 ###
 options:

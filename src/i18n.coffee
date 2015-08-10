@@ -19,6 +19,8 @@ module.exports =
   ###
   emailKindNewUser: 'newuser'
 
+  optionsRouteTagsPublicRequiredAndArray: "options parameter requires a 'routeTagsPublic' field that is an array."
+
   assertDbMethodsRequired: "The required parameter 'dbMethods' is missing."
   assertDbMethodsAllRequired: "The parameter 'dbMethods' missed an 'all' method."
   assertPluginRequired: "The required parameter 'plugin' is missing."

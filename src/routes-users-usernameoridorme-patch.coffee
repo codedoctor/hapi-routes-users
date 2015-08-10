@@ -16,6 +16,7 @@ module.exports = (plugin,options = {}) ->
   Hoek.assert options._tenantId,i18n.assertTenantIdInOptionsRequired
   Hoek.assert options.baseUrl,i18n.assertBaseUrlInOptionsRequired
   Hoek.assert options.realm,i18n.assertRealmInOptionsRequired
+  Hoek.assert options.routeTagsPublic && _.isArray(options.routeTagsPublic),i18n.optionsRouteTagsPublicRequiredAndArray
 
   Hoek.assert options.sendEmail,i18n.assertSendEmailInOptionsRequired
   Hoek.assert _.isFunction(options.sendEmail),i18n.assertSendEmailInOptionsIsFunction
@@ -49,6 +50,8 @@ module.exports = (plugin,options = {}) ->
     path: "/users/{usernameOrIdOrMe}"
     method: "PATCH"
     config:
+      description: "Updates a user."
+      tags: options.routeTagsPublic
       validate:
         params: Joi.object().keys(
                   usernameOrIdOrMe: validationSchemas.usernameOrIdOrMe.required() 

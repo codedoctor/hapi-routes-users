@@ -16,6 +16,7 @@ module.exports = (plugin,options = {}) ->
   Hoek.assert options._tenantId,i18n.assertTenantIdInOptionsRequired
   Hoek.assert options.baseUrl,i18n.assertBaseUrlInOptionsRequired
   Hoek.assert options.realm,i18n.assertRealmInOptionsRequired
+  Hoek.assert options.routeTagsPublic && _.isArray(options.routeTagsPublic),i18n.optionsRouteTagsPublicRequiredAndArray
 
   Hoek.assert options.sendEmail,i18n.assertSendEmailInOptionsRequired
   Hoek.assert _.isFunction(options.sendEmail),i18n.assertSendEmailInOptionsIsFunction
@@ -57,7 +58,9 @@ module.exports = (plugin,options = {}) ->
   plugin.route
     path: "/users"
     method: "GET"
-    config: {}
+    config:
+      description: "Retrieves a paged list of all users."
+      tags: options.routeTagsPublic
     handler: (request, reply) ->
       queryOptions = {}
       queryOptions.offset = helperParseMyInt(request.query.offset,0)
@@ -78,6 +81,8 @@ module.exports = (plugin,options = {}) ->
     path: "/users"
     method: "POST"
     config:
+      description: "Creates a new user."
+      tags: options.routeTagsPublic
       auth: false
       validate:
         payload: Joi.object().keys(
@@ -121,6 +126,8 @@ module.exports = (plugin,options = {}) ->
     path: "/users/reset-password"
     method: "POST"
     config:
+      description: "Initiates the password reset sequence for a user. The user must have an email on file."
+      tags: options.routeTagsPublic
       auth: false
       validate:
         payload: Joi.object().keys(
@@ -160,6 +167,8 @@ module.exports = (plugin,options = {}) ->
     path: "/users/reset-password/tokens"
     method: "POST"
     config:
+      description: "Completes the password reset sequence by providing token and password."
+      tags: options.routeTagsPublic
       auth: false
       validate:
         payload: Joi.object().keys(
@@ -194,6 +203,8 @@ module.exports = (plugin,options = {}) ->
     path: "/users/{usernameOrIdOrMe}/password"
     method: "PUT"
     config:
+      description: "Updates a user's password."
+      tags: options.routeTagsPublic
       validate:
         params: Joi.object().keys(
                     usernameOrIdOrMe: validationSchemas.usernameOrIdOrMe.required().description("The quantifier for the user to return. Can be a username, id or 'me'.")
@@ -228,6 +239,8 @@ module.exports = (plugin,options = {}) ->
     path: "/users/{usernameOrIdOrMe}"
     method: "DELETE"
     config:
+      description: "Deletes a user."
+      tags: options.routeTagsPublic
       validate:
         params: Joi.object().keys(
                   usernameOrIdOrMe: validationSchemas.usernameOrIdOrMe.required().description("The quantifier for the user to return. Can be a username, id or 'me'.")
@@ -250,6 +263,8 @@ module.exports = (plugin,options = {}) ->
     path: "/users/{usernameOrIdOrMe}"
     method: "GET"
     config:
+      description: "Retrieves a user."
+      tags: options.routeTagsPublic
       validate:
         params: Joi.object().keys(
                     usernameOrIdOrMe: validationSchemas.usernameOrIdOrMe.required().description("The quantifier for the user to return. Can be a username, id or 'me'.")

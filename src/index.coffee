@@ -11,6 +11,7 @@ routesToExport = [
   require './routes-users-usernameoridorme-patch'
   require './routes-users-reset-password-post'
   require './routes-users-reset-password-token-post'
+  require './routes-users-for-ids-get'
 ]
 ###
 options:

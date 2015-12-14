@@ -83,14 +83,94 @@
   token: Joi.string().min(20).max(100).example(&#39;2JkfnuslAY53dd011b5ff6cb3970260b42pYhkPGfPHy&#39;),
   login: Joi.string().min(minLoginLength).max(maxLoginLength).example(&#39;johnsmith&#39;),
   name: Joi.string().min(2).max(40).example(&#39;John Smith&#39;),
-  email: Joi.string().email().example(&#39;john@smith.com&#39;)
+  email: Joi.string().email().example(&#39;john@smith.com&#39;),
+
+  &#47;*
+  400 Bad Request
+   *&#47;
+  errorBadRequest: function() {
+    return Joi.object({
+      statusCode: Joi.number().description(&quot;The http status code.&quot;).required()[&quot;default&quot;](400).example(400).integer(),
+      error: Joi.string().description(&quot;The short error name.&quot;).required()[&quot;default&quot;](&quot;Bad Request&quot;).example(&#39;Bad Request&#39;),
+      message: Joi.string().description(&quot;The detailed error message.&quot;).required()
+    }).description(&quot;The passed parameters probably failed some validation.&quot;).meta({
+      className: &#39;ErrorBadRequest&#39;
+    }).required().options({
+      allowUnknown: true,
+      stripUnknown: false
+    });
+  },
+
+  &#47;*
+  401 Unauthorized
+   *&#47;
+  errorUnauthorized: function() {
+    return Joi.object({
+      statusCode: Joi.number().description(&quot;The http status code.&quot;).required()[&quot;default&quot;](401).example(401).integer(),
+      error: Joi.string().description(&quot;The short error name.&quot;).required()[&quot;default&quot;](&quot;Unauthorized&quot;).example(&#39;Unauthorized&#39;),
+      message: Joi.string().description(&quot;The detailed error message.&quot;).required()
+    }).description(&quot;You are not authorized to access this resource.&quot;).meta({
+      className: &#39;ErrorUnauthorized&#39;
+    }).required().options({
+      allowUnknown: true,
+      stripUnknown: false
+    });
+  },
+
+  &#47;*
+  403 Forbidden
+   *&#47;
+  errorForbidden: function() {
+    return Joi.object({
+      statusCode: Joi.number().description(&quot;The http status code.&quot;).required()[&quot;default&quot;](403).example(403).integer(),
+      error: Joi.string().description(&quot;The short error name.&quot;).required()[&quot;default&quot;](&quot;Forbidden&quot;).example(&#39;Forbidden&#39;),
+      message: Joi.string().description(&quot;The detailed error message.&quot;).required()
+    }).description(&quot;Raised in case the user lacks priviledges or the API key does not posess necessary scopes&#47;&quot;).meta({
+      className: &#39;ErrorForbidden&#39;
+    }).required().options({
+      allowUnknown: true,
+      stripUnknown: false
+    });
+  },
+
+  &#47;*
+  404 Not Found
+   *&#47;
+  errorNotFound: function() {
+    return Joi.object({
+      statusCode: Joi.number().description(&quot;The http status code.&quot;).required()[&quot;default&quot;](404).example(404).integer(),
+      error: Joi.string().description(&quot;The short error name.&quot;).required()[&quot;default&quot;](&quot;Not Found&quot;).example(&#39;Not Found&#39;),
+      message: Joi.string().description(&quot;The detailed error message.&quot;).required()
+    }).description(&quot;The requested resource could not be found.&quot;).meta({
+      className: &#39;ErrorNotFound&#39;
+    }).required().options({
+      allowUnknown: true,
+      stripUnknown: false
+    });
+  },
+
+  &#47;*
+  500 Internal Server Error
+   *&#47;
+  errorInternalServerError: function() {
+    return Joi.object({
+      statusCode: Joi.number().description(&quot;The http status code.&quot;).required()[&quot;default&quot;](500).example(500).integer(),
+      error: Joi.string().description(&quot;The short error name.&quot;).required()[&quot;default&quot;](&quot;Internal Server Error&quot;).example(&quot;Internal Server Error&quot;),
+      message: Joi.string().description(&quot;The detailed error message.&quot;).required()
+    }).description(&quot;An internal server error occurred.&quot;).meta({
+      className: &#39;ErrorInternalServerError&#39;
+    }).required().options({
+      allowUnknown: true,
+      stripUnknown: false
+    });
+  }
 }</code></pre>
     
   </dd>
 </dl>
     </div>
     <div id='footer'>
-  August 10, 15 07:31:25 by
+  December 14, 15 06:03:19 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>

@@ -1,6 +1,6 @@
 {
   "name": "hapi-routes-users",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "private": false,
   "main": "lib/index.js",
   "license": "MIT",

@@ -38,7 +38,7 @@ describe 'testing users all', ->
               should.exist result
         
               cb null
-      describe 'against /users with sort parameters', ->
+      describe 'against /users with parameters', ->
         beforeEach (cb) ->
           data1 = {}
           data2 = {}
@@ -77,54 +77,108 @@ describe 'testing users all', ->
               fixtures.user1.id = user._id
               return cb err if err
               cb null
-        it 'should sort the result according to primaryEmail in DESC order', (cb) ->
-          options =
-            method: "GET"
-            url: "/users?sort=-primaryEmail"
-            credentials: fixtures.user1
-          server.inject options, (response) ->
-            result = response.result
-            result.items[0].username.should.equal fixtures.user4.username
-            response.statusCode.should.equal 200
-            should.exist result
-            cb null
-        it 'should sort the result according to primaryEmail in ASC order', (cb) ->
-          options =
-            method: "GET"
-            url: "/users?sort=primaryEmail"
-            credentials: fixtures.user1
-          server.inject options, (response) ->
-            result = response.result
-            result.items[0].username.should.equal fixtures.user1.username
-            response.statusCode.should.equal 200
-            should.exist result
-            cb null
-        it 'should support multiple sort parameters', (cb) ->
-          options =
-            method: "GET"
-            url: "/users?sort=-primaryEmail gender"
-            credentials: fixtures.user1
-          server.inject options, (response) ->
-            result = response.result
-            result.items[0].username.should.equal fixtures.user5.username
-            result.items[0].gender.should.equal fixtures.user4.gender
-            result.items[1].username.should.equal fixtures.user4.username
-            result.items[1].gender.should.equal fixtures.user5.gender
-            response.statusCode.should.equal 200
-            should.exist result
-            cb null
-        it 'should support multiple sort parameters', (cb) ->
-          options =
-            method: "GET"
-            url: "/users?sort=-primaryEmail -gender"
-            credentials: fixtures.user1
-          server.inject options, (response) ->
-            result = response.result
-            result.items[0].username.should.equal fixtures.user5.username
-            result.items[0].gender.should.equal fixtures.user5.gender
-            result.items[1].username.should.equal fixtures.user4.username
-            result.items[1].gender.should.equal fixtures.user4.gender
-            response.statusCode.should.equal 200
-            should.exist result
-            cb null
-
+        describe 'sort parameters', ->
+          it 'should sort the result according to primaryEmail in DESC order', (cb) ->
+            options =
+              method: "GET"
+              url: "/users?sort=-primaryEmail"
+              credentials: fixtures.user1
+            server.inject options, (response) ->
+              result = response.result
+              result.items[0].username.should.equal fixtures.user4.username
+              response.statusCode.should.equal 200
+              should.exist result
+              cb null
+          it 'should sort the result according to primaryEmail in ASC order', (cb) ->
+            options =
+              method: "GET"
+              url: "/users?sort=primaryEmail"
+              credentials: fixtures.user1
+            server.inject options, (response) ->
+              result = response.result
+              result.items[0].username.should.equal fixtures.user1.username
+              response.statusCode.should.equal 200
+              should.exist result
+              cb null
+          it 'should support multiple sort parameters', (cb) ->
+            options =
+              method: "GET"
+              url: "/users?sort=-primaryEmail gender"
+              credentials: fixtures.user1
+            server.inject options, (response) ->
+              result = response.result
+              result.items[0].username.should.equal fixtures.user5.username
+              result.items[0].gender.should.equal fixtures.user4.gender
+              result.items[1].username.should.equal fixtures.user4.username
+              result.items[1].gender.should.equal fixtures.user5.gender
+              response.statusCode.should.equal 200
+              should.exist result
+              cb null
+          it 'should support multiple sort parameters', (cb) ->
+            options =
+              method: "GET"
+              url: "/users?sort=-primaryEmail -gender"
+              credentials: fixtures.user1
+            server.inject options, (response) ->
+              result = response.result
+              result.items[0].username.should.equal fixtures.user5.username
+              result.items[0].gender.should.equal fixtures.user5.gender
+              result.items[1].username.should.equal fixtures.user4.username
+              result.items[1].gender.should.equal fixtures.user4.gender
+              response.statusCode.should.equal 200
+              should.exist result
+              cb null
+        describe 'against /users with where parameters using mongo-querystring module', ->
+          it 'should parse the url query and return only users with username === user4', (cb) ->
+            options =
+              method: "GET"
+              url: "/users?username=user4"
+              credentials: fixtures.user1
+            server.inject options, (response) ->
+              result = response.result
+              should.exist result
+              valid = _.every result.items, (item) ->
+                item.username == 'user4'
+              valid.should.equal true
+              response.statusCode.should.equal 200
+              cb null
+          it 'should parse the url query and return only users with username !== user4', (cb) ->
+            options =
+              method: "GET"
+              url: "/users?username=!user4"
+              credentials: fixtures.user1
+            server.inject options, (response) ->
+              result = response.result
+              should.exist result
+              valid = _.every result.items, (item) ->
+                item.username != 'user4'
+              valid.should.equal true
+              response.statusCode.should.equal 200
+              cb null
+          it 'should parse multiple queries', (cb) ->
+            options =
+              method: "GET"
+              url: "/users?username=user4&gender=male"
+              credentials: fixtures.user1
+            server.inject options, (response) ->
+              result = response.result
+              should.exist result
+              valid = _.every result.items, (item) ->
+                item.gender == 'male' and item.username == 'user4'
+              valid.should.equal true
+              response.statusCode.should.equal 200
+              cb null
+          it 'should combine with other query features like count', (cb) ->
+            options =
+              method: "GET"
+              url: "/users?username=!user1&count=2"
+              credentials: fixtures.user1
+            server.inject options, (response) ->
+              result = response.result
+              should.exist result
+              valid = _.every result.items, (item) ->
+                item.username != 'user1'
+              valid.should.equal true
+              result.items.should.have.length 2
+              response.statusCode.should.equal 200
+              cb null

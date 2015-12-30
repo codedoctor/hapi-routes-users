@@ -13,11 +13,12 @@
   },
   "description": "Provides API endpoints for HAPI servers to manage users. DO NOT USE YET",
   "dependencies": {
-    "async": "1.5.0",
     "api-pagination": "1.0.6",
-    "hoek": "3.0.4",
+    "async": "1.5.0",
     "boom": "3.0.0",
+    "hoek": "3.0.4",
     "joi": "7.0.1",
+    "lodash": "^3.10.1",
     "underscore": "1.8.3"
   },
   "peerDependencies": {

@@ -2,6 +2,7 @@ _ = require 'underscore'
 Boom = require 'boom'
 Hoek = require "hoek"
 Joi = require "joi"
+MongoQS = require "mongo-querystring";
 url = require 'url'
 
 helperAddTokenToUser = require './helper-add-token-to-user'
@@ -10,6 +11,25 @@ i18n = require './i18n'
 validationSchemas = require './validation-schemas'
 helperParseMyInt = require './helper-parse-my-int'
 apiPagination = require 'api-pagination'
+
+qs = new MongoQS(
+  blacklist:
+    sort: true
+    limit: true
+    count: true
+    select: true
+    offset: true
+    skip: true
+    exec: true
+    where: true
+  custom:
+    bbox: 'geojson'
+    near: 'geojson'
+    after_create: 'createdAt'
+    after_update: 'createdAt'
+    before_create: 'createdAt'
+    before_update: 'createdAt'
+)
 
 module.exports = (plugin,options = {}) ->
   Hoek.assert options.clientId,i18n.assertClientIdInOptionsRequired
@@ -67,6 +87,7 @@ module.exports = (plugin,options = {}) ->
       # Accepts mongoose sort in string format
       # http://mongoosejs.com/docs/api.html#query_Query-sort
       queryOptions.sort = request.query.sort
+      queryOptions.where = qs.parse request.query
       queryOptions.count = helperParseMyInt(request.query.count,20)
 
       methodsUsers().all options._tenantId,queryOptions, (err,resultData) ->

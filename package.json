@@ -19,6 +19,7 @@
     "hoek": "3.0.4",
     "joi": "7.0.1",
     "lodash": "^3.10.1",
+    "mongo-querystring": "^1.2.0",
     "underscore": "1.8.3"
   },
   "peerDependencies": {

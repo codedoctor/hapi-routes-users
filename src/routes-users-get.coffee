@@ -64,6 +64,9 @@ module.exports = (plugin,options = {}) ->
     handler: (request, reply) ->
       queryOptions = {}
       queryOptions.offset = helperParseMyInt(request.query.offset,0)
+      # Accepts mongoose sort in string format
+      # http://mongoosejs.com/docs/api.html#query_Query-sort
+      queryOptions.sort = request.query.sort
       queryOptions.count = helperParseMyInt(request.query.count,20)
 
       methodsUsers().all options._tenantId,queryOptions, (err,resultData) ->
